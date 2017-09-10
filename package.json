@@ -2,8 +2,9 @@
   "name": "spip-node",
   "version": "0.0.1",
   "description": "API REST nodejs pour SPIP",
-  "main": "index.js",
-  "scripts": {    
+  "main": "app.js",
+  "scripts": {
+    "test": "pm2 start ./tests/spip.js --watch"
   },
   "keywords": [
     "SPIP",
@@ -12,7 +13,24 @@
     "API"
   ],
   "author": "Cédric Caspar",
-  "license": "ISC",
-  "dependencies": {    
-  }
+  "license": "GPL-3.0",
+  "dependencies": {
+    "express": "^4.15.4",
+    "async-waterfall": "^0.1.5",
+    "mysql2": "^1.4.2"
+  },
+  "devDependencies": {
+    "colors": "^1.1.2"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/titou-from-mars/spip-node.git"
+  },
+  "bugs": {
+    "url": "https://github.com/titou-from-mars/spip-node/issues"
+  },
+  "homepage": "https://github.com/titou-from-mars/spip-node#readme"
 }
