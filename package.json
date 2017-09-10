@@ -1,0 +1,18 @@
+{
+  "name": "spip-node",
+  "version": "0.0.1",
+  "description": "API REST nodejs pour SPIP",
+  "main": "index.js",
+  "scripts": {    
+  },
+  "keywords": [
+    "SPIP",
+    "REST",
+    "Mysql",
+    "API"
+  ],
+  "author": "Cédric Caspar",
+  "license": "ISC",
+  "dependencies": {    
+  }
+}
