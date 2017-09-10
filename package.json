@@ -4,7 +4,8 @@
   "description": "API REST nodejs pour SPIP",
   "main": "app.js",
   "scripts": {
-    "test": "pm2 start ./tests/spip.js --watch"
+    "test": "pm2 start ./tests/spip.js --watch",
+    "start": "pm2 start ./app.js --watch"
   },
   "keywords": [
     "SPIP",
@@ -15,8 +16,10 @@
   "author": "Cédric Caspar",
   "license": "GPL-3.0",
   "dependencies": {
-    "express": "^4.15.4",
     "async-waterfall": "^0.1.5",
+    "body-parser": "^1.18.0",
+    "express": "^4.15.4",
+    "morgan": "^1.8.2",
     "mysql2": "^1.4.2"
   },
   "devDependencies": {
