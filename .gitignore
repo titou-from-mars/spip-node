@@ -58,6 +58,5 @@ typings/
 .env
 
 #local tests
-tests/spip\.js  
-tests/database\.js 
-
+tests/spip\.js
+tests/database\.js
