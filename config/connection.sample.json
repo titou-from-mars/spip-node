@@ -1,0 +1,9 @@
+{
+    "name":"identifiant pour cette connection",
+    "connectionLimit":10,
+    "debug":false,
+    "host":"HOST",
+    "database":"DB_NAME",
+    "user":"USER_NAME",
+    "password":"PASSWORD"
+}
