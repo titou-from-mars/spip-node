@@ -21,8 +21,8 @@ class SpipMeta{
 
     }
 
-    getAll(){
-
+    getAll(){               
+        return this.spipQuery.query("SELECT * FROM `spip_meta` WHERE 1");
     }
 }
 module.exports = SpipMeta;
