@@ -10,7 +10,7 @@ class SpipMeta{
     }
     get(meta){
         let sql = mysql.format("SELECT * FROM `spip_meta` WHERE `nom` = ? ", [meta]);        
-        this.spipQuery.query(sql);
+        return this.spipQuery.query(sql);
     }
 
     set(meta,value){
