@@ -12,8 +12,8 @@ class SpipQuery{
      * @return {object} - le résultat de la requête sql
      */
     query (sql){
-        //console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>exécute la requête :",sql);
-        //return true;
+        console.log("exécute la requête :",sql);
+
         return new Promise((resolve, reject) =>{
             this.pool.getConnection(function(err,connection){
                 if(err) {
@@ -25,9 +25,7 @@ class SpipQuery{
                         if (err) {                            
                             console.log(err);
                             reject(err);                            
-                        } else {
-                            console.log("ok");
-                            console.log(result);
+                        } else {  
                             resolve(result);
                         }
                 

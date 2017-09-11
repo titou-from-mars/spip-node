@@ -22,9 +22,11 @@ db.connect((err,con)=>{
 });
 
 app.listen(3000,()=>{
-    console.log('Serveur SPIP-Node écoute sur le port 3000');
-    var SPIP = new spip(db.pool);
-    SPIP.select("article",{balises:["id_article","titre"],criteres:{id_auteur:1}}).then((result)=>{console.log("REEEETTTOUR",result)});
+    //console.log('Serveur SPIP-Node écoute sur le port 3000');
+    var SPIP = new spip(db.pool);    
+    SPIP.meta.get('nom_site')
+    .then((retour)=>console.log("Serveur",retour[0].valeur, "écoute sur le port 3000"))
+    .catch((e)=>console.log("Erreur :", e));
     
     
 });
