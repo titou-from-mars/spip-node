@@ -25,9 +25,6 @@
   "devDependencies": {
     "colors": "^1.1.2"
   },
-  "directories": {
-    "test": "tests"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/titou-from-mars/spip-node.git"
