@@ -192,29 +192,6 @@ Spip.prototype.sendQuery =  function(query,callback){
 
 }
 
-Spip.prototype.processQuery =  function(step,callback){
-    pipe(
-        step,
-        (err,query)=>{
-            if(err){
-                console.log("Erreur dans le traitement de la requête "+err);
-                callback(err,null);
-                
-            }else{
-                this.spipquery.query(query.sql)
-                .then((result)=>{
-                    callback(null,result);
-                })
-                .catch((reason)=> {
-                    callback(reason,null);
-                });
-            }
-        }
-    )
-}
-
-
-
 
 module.exports = Spip;
 
