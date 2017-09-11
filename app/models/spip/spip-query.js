@@ -14,25 +14,30 @@ class SpipQuery{
     query (sql){
         //console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>exécute la requête :",sql);
         //return true;
-        this.pool.getConnection(function(err,connection){
-            if(err) console.log("Erreur de connexion:",err);
-            else{
-                connection.query(sql, function (err, result, fields) {
-                    connection.release();
-                    if (err) {
-                        console.log("Erreur!!".red);
-                        console.trace(err);
-                        return err;
-                    } else {
-                        console.log("ok");
-                        console.log(result);
-                        return result;
-                    }
-            
-                });
+        return new Promise((resolve, reject) =>{
+            this.pool.getConnection(function(err,connection){
+                if(err) {
+                    console.log("Erreur de connexion:",err);
+                    reject(err);
+                }else{
+                    connection.query(sql, function (err, result, fields) {
+                        connection.release();
+                        if (err) {                            
+                            console.log(err);
+                            reject(err);                            
+                        } else {
+                            console.log("ok");
+                            console.log(result);
+                            resolve(result);
+                        }
+                
+                    });
+    
+                }
+            });
 
-            }
         });
+        
         
     }
 

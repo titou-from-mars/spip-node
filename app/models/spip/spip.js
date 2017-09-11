@@ -122,7 +122,10 @@ Spip.prototype.update = function (boucle = throwIfMissing(), {set = null, criter
  * @return {object} - Le résultat de la requête sql
  */
 Spip.prototype.select = function (boucle = throwIfMissing(), {balises = "*", criteres = null} = {}) {
-    this.processQuery(
+    let self = this;
+    return new Promise((resolve, reject) =>{
+        
+    pipe(
         [
             (callback)=>parse.init({boucle:boucle, balises:balises, criteres:criteres},callback),
             parse.limit,
@@ -132,19 +135,42 @@ Spip.prototype.select = function (boucle = throwIfMissing(), {balises = "*", cri
             format.select,
             format.join,
             format.where,
-            format.groupby           
-        ]
+            format.groupby,
+            self.sendQuery.bind(this)          
+        ],
+        function(err,result){
+            console.log("retour");
+            if(err) reject(err);
+            else resolve(result);
+        }
     );
+
+    });
 }
 
-Spip.prototype.processQuery =  function(step){
+Spip.prototype.sendQuery =  function(query,callback){
+    this.spipquery.query(query.sql)
+    .then((result)=>callback(null,result))
+    .catch((reason)=>callback(reason,null));
+
+}
+
+Spip.prototype.processQuery =  function(step,callback){
     pipe(
         step,
         (err,query)=>{
             if(err){
                 console.log("Erreur dans le traitement de la requête "+err);
+                callback(err,null);
+                
             }else{
-                return this.spipquery.query(query.sql);
+                this.spipquery.query(query.sql)
+                .then((result)=>{
+                    callback(null,result);
+                })
+                .catch((reason)=> {
+                    callback(reason,null);
+                });
             }
         }
     )
