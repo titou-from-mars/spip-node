@@ -8,11 +8,11 @@ var format = require("./spip-sql.js");
 var parse = require("./boucles-parse.js");
 
 
-function Spip(connection) {
-    this.connection = connection;
-    this.spipquery = new spipQuery(this.connection);
+function Spip(pool) {
+    this.pool = pool;
+    this.spipquery = new spipQuery(this.pool);
     this.champsInterdits = ["htpass", "pass", "low_sec"];
-    this.meta = new spipMeta(this.connection,this.spipquery);
+    this.meta = new spipMeta(this.spipquery);
 }
 
 

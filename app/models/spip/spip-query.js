@@ -1,7 +1,7 @@
 class SpipQuery{
 
-    constructor(connection){
-        this.connection = connection;
+    constructor(pool){
+        this.pool = pool;
     }
 
 
@@ -14,18 +14,26 @@ class SpipQuery{
     query (sql){
         //console.log(">>>>>>>>>>>>>>>>>>>>>>>>>>exécute la requête :",sql);
         //return true;
-        let query = this.connection.query(sql, function (err, result, fields) {
-            if (err) {
-                console.log("Erreur!!".red);
-                console.trace(err);
-                return err;
-            } else {
-                console.log("ok");
-                console.log(result);
-                return result;
+        this.pool.getConnection(function(err,connection){
+            if(err) console.log("Erreur de connexion:",err);
+            else{
+                connection.query(sql, function (err, result, fields) {
+                    connection.release();
+                    if (err) {
+                        console.log("Erreur!!".red);
+                        console.trace(err);
+                        return err;
+                    } else {
+                        console.log("ok");
+                        console.log(result);
+                        return result;
+                    }
+            
+                });
+
             }
-    
         });
+        
     }
 
 }    

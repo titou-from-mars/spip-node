@@ -1,8 +1,9 @@
 var express = require('express'),
     bodyParser = require('body-parser'),
     logger = require('morgan'),
-    connectionParam = require('./config/connection.json');
-    database = require('./app/database.js');
+    connectionParam = require('./config/connection.json'),
+    database = require('./app/database.js'),
+    spip = require('./app/models/spip/spip.js');
 var app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
@@ -20,6 +21,6 @@ db.connect((err,con)=>{
     }
 });
 
-app.listen(3000,function(){
+app.listen(3000,()=>{
     console.log('Serveur SPIP-Node écoute sur le port 3000');
 });
