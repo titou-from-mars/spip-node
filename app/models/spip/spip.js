@@ -42,11 +42,21 @@ Spip.prototype.count = function (boucle, balises, critères) {
  */
 Spip.prototype.associer = function(boucle=throwIfMissing(),{liens = throwIfMissing(), id = throwIfMissing() }){
 
-    this.processQuery([        
-        (callback)=>parse.init({boucle:boucle,liens:liens,id:id},callback),
-        parse.liens, 
-        format.lien
-    ]);
+    return new Promise((resolve, reject) =>{        
+        pipe(
+            [
+                (callback)=>parse.init({boucle:boucle,liens:liens,id:id},callback),
+                parse.liens, 
+                format.lien,
+                this.sendQuery.bind(this)          
+            ],
+            function(err,result){                
+                if(err) reject(err);
+                else resolve(result);
+            }
+        );
+
+    });
 }
 /**
  * Effectue une requête de type DELETE sur une table d'boucle SPIP. Cette requête supprime l'élément. Pour le mettre "à la poubelle",
@@ -57,14 +67,26 @@ Spip.prototype.associer = function(boucle=throwIfMissing(),{liens = throwIfMissi
  * @return {object} - Le résultat de la requête sql
  */
 Spip.prototype.delete = function(boucle = throwIfMissing() ,{criteres = throwIfMissing()}){
-    this.processQuery([        
-        (callback)=>parse.init({boucle:boucle,criteres:criteres},callback),
-        parse.jointures,
-        parse.criteres,
-        format.delete,
-        format.join,
-        format.where
-    ])   
+    
+    return new Promise((resolve, reject) =>{        
+        pipe(
+            [
+                (callback)=>parse.init({boucle:boucle,criteres:criteres},callback),
+                parse.jointures,
+                parse.criteres,
+                format.delete,
+                format.join,
+                format.where,
+                this.sendQuery.bind(this)          
+            ],
+            function(err,result){                
+                if(err) reject(err);
+                else resolve(result);
+            }
+        );
+
+    });
+       
 }
 
 /**
@@ -75,12 +97,21 @@ Spip.prototype.delete = function(boucle = throwIfMissing() ,{criteres = throwIfM
  * @return {object} - Le résultat de la requête sql
  */
 Spip.prototype.insert = function (boucle = throwIfMissing(), {set=throwIfMissing()}) {
-    this.processQuery(
-        [
-            (callback)=>parse.init({boucle:boucle, set:set},callback),            
-            format.insert
-        ]
-    );
+   
+    return new Promise((resolve, reject) =>{        
+        pipe(
+            [
+                (callback)=>parse.init({boucle:boucle, set:set},callback),            
+                format.insert,
+                this.sendQuery.bind(this)          
+            ],
+            function(err,result){                
+                if(err) reject(err);
+                else resolve(result);
+            }
+        );
+
+    });
    
 }
 
@@ -95,18 +126,26 @@ Spip.prototype.insert = function (boucle = throwIfMissing(), {set=throwIfMissing
  */
 Spip.prototype.update = function (boucle = throwIfMissing(), {set = null, criteres=null}={}) {
 
-    this.processQuery(
-        [
-            //(callback)=>this.parseQuery({boucle:boucle, criteres:criteres,set:set},callback),
-            (callback)=>parse.init({boucle:boucle, criteres:criteres,set:set},callback),
-            parse.jointures,
-            parse.criteres,
-            format.update,
-            format.join,
-            format.where,
-            format.set           
-        ]
-    );
+    return new Promise((resolve, reject) =>{        
+        pipe(
+            [
+                (callback)=>parse.init({boucle:boucle, criteres:criteres,set:set},callback),
+                parse.jointures,
+                parse.criteres,
+                format.update,
+                format.join,
+                format.where,
+                format.set,  
+                this.sendQuery.bind(this)          
+            ],
+            function(err,result){                
+                if(err) reject(err);
+                else resolve(result);
+            }
+        );
+
+    });
+
 
 }
 
@@ -122,28 +161,26 @@ Spip.prototype.update = function (boucle = throwIfMissing(), {set = null, criter
  * @return {object} - Le résultat de la requête sql
  */
 Spip.prototype.select = function (boucle = throwIfMissing(), {balises = "*", criteres = null} = {}) {
-    let self = this;
-    return new Promise((resolve, reject) =>{
-        
-    pipe(
-        [
-            (callback)=>parse.init({boucle:boucle, balises:balises, criteres:criteres},callback),
-            parse.limit,
-            parse.balises,
-            parse.jointures,
-            parse.criteres,
-            format.select,
-            format.join,
-            format.where,
-            format.groupby,
-            self.sendQuery.bind(this)          
-        ],
-        function(err,result){
-            console.log("retour");
-            if(err) reject(err);
-            else resolve(result);
-        }
-    );
+   
+    return new Promise((resolve, reject) =>{        
+        pipe(
+            [
+                (callback)=>parse.init({boucle:boucle, balises:balises, criteres:criteres},callback),
+                parse.limit,
+                parse.balises,
+                parse.jointures,
+                parse.criteres,
+                format.select,
+                format.join,
+                format.where,
+                format.groupby,
+                this.sendQuery.bind(this)          
+            ],
+            function(err,result){                
+                if(err) reject(err);
+                else resolve(result);
+            }
+        );
 
     });
 }
