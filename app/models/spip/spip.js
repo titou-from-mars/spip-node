@@ -6,6 +6,8 @@ var spipMeta = require("./spip-meta.js");
 var spip_boucles = require('./boucles.js');
 var format = require("./spip-sql.js");
 var parse = require("./boucles-parse.js");
+const mysql = require('mysql2');
+const createHash = require("sha.js");
 
 
 function Spip(pool) {
@@ -20,6 +22,44 @@ Spip.prototype.count = function (boucle, balises, critères) {
 
 }
 
+Spip.prototype.login = function(login,pwd){
+    return new Promise( (resolve,reject)=>{
+        let query = "SELECT * FROM `spip_auteurs` WHERE `login`= " + mysql.escape(login)+" AND `statut` != '5poubelle';"; 
+        this.spipquery.query(query)
+        .then((rows)=>{
+            let user, sha256, hash,message;
+            let logged = false;
+            let retour = {};            
+            let login_exist = rows.length > 0;
+
+            if(login_exist){
+                user = rows[0];
+                console.log("login exist".green);
+                sha256 = createHash('sha256');
+                hash = sha256.update(user['alea_actuel']+pwd, 'utf8').digest('hex');
+                if(hash === user['pass']) logged = true;
+            }else{
+                console.log("le login n'existe pas !".red);
+            }
+
+            if(logged){
+                 console.log("on retourne le user".green);
+                resolve( {logged:logged,user:user});
+            }else{
+                console.log("on retourne un user vide".red);
+                resolve( {logged:logged,user:{}});
+            }
+
+        })
+        .catch((e)=>{
+            console.log("Erreur dans le processus de login",e);
+            reject(e);
+        })
+    });
+
+
+
+}
 
 
 
