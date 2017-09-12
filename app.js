@@ -6,14 +6,15 @@ var express = require('express'),
     spip = require('./app/models/spip/spip.js'),
     spipMiddleware = require('./app/middlewares/inject-spip.js');
 var app = express();
+//Création du pool de connection à la base
+var db = new database(connectionParam);
+app.use(spipMiddleware(db.pool));
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(require('./app/routes'));
 
-//Création du pool de connection à la base
-var db = new database(connectionParam);
-app.use(spipMiddleware(db.pool));
+
 
 app.listen(3000,()=>{  
     var SPIP = new spip(db.pool);    
