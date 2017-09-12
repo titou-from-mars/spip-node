@@ -14,28 +14,21 @@ class SpipQuery{
     query (sql){
         console.log("exécute la requête :",sql);
 
-        return new Promise((resolve, reject) =>{
-            this.pool.getConnection(function(err,connection){
-                if(err) {
-                    console.log("Erreur de connexion:",err);
-                    reject(err);
-                }else{
-                    connection.query(sql, function (err, result, fields) {
-                        connection.release();
-                        if (err) {                            
-                            console.log(err);
-                            reject(err);                            
-                        } else {  
-                            resolve(result);
-                        }
-                
-                    });
-    
-                }
+        return this.pool.getConnection()
+            .then((connection)=>{
+                const res = connection.query(sql);
+                connection.release();
+                return res;
+            })
+            .then((result)=>{
+                console.log(result);
+                return result[0];
+            })
+            .catch((err)=>{
+                console.log(err);
+                return err;
             });
-
-        });
-        
+           
         
     }
 

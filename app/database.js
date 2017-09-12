@@ -1,4 +1,4 @@
-var mysql = require("mysql2");
+var mysql = require("mysql2/promise");
 
 class Database{
     constructor(config){
