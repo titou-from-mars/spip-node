@@ -23,7 +23,8 @@
     "morgan": "^1.8.2",
     "mysql2": "^1.4.2",
     "passport": "^0.4.0",
-    "passport-jwt": "^3.0.0"
+    "passport-jwt": "^3.0.0",
+    "sha.js": "^2.4.8"
   },
   "devDependencies": {
     "colors": "^1.1.2"
