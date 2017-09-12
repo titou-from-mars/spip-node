@@ -1,7 +1,7 @@
 const express = require('express'), 
       jwt = require('jsonwebtoken'), 
       router = express.Router(),
-      secretOrKey = '49bdc75682b5c5c26abba5434bb2ed45';
+      secretOrKey = require('../../config/security.json').secretOrKey; 
 
 router.post('/login',function(req,res){
     console.log("login");

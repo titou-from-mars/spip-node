@@ -16,7 +16,7 @@ const express = require('express'),
     // configure JWT, passport...
     var jwtOptions = {}
     jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt');//simule comportement 2.x.x . Il faudra peut-être adopter  ExtractJwt.fromAuthHeaderAsBearerToken() de la 3.x.x
-    jwtOptions.secretOrKey = '49bdc75682b5c5c26abba5434bb2ed45';
+    jwtOptions.secretOrKey = require('./config/security.json').secretOrKey; 
     
 var app = express();
 //Création du pool de connection à la base
