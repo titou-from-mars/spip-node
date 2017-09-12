@@ -4,7 +4,12 @@ router = express.Router();
 
 router.get('/:collection/:id',function(req,res){
     //recupère un élément d'une collection SPIP.
-    res.send('récupère '+req.params.collection+" id "+req.params.id);
+    let id = {};
+    id["id_"+req.params.collection] = req.params.id;
+    req.spip.select(req.params.collection,{criteres:id})
+    .then((retour)=>res.send(retour))
+    .catch((e)=> res.status(500).send('Une erreur est survenue :-('));
+    
 });
 
 router.post('/:collection',function(req,res){
