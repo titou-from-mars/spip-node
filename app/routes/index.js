@@ -2,7 +2,14 @@ var express = require('express'),
     router = express.Router();
 
 router.get('/',function(req,res,next){
-    res.send('Merci  de choisir une collection SPIP, ex, /articles/');
+    req.spip.meta.get('nom_site')
+    .then((retour)=>res.send('Bienvenue sur le serveur '+retour[0].valeur+'. Merci  de choisir une collection SPIP, ex, /articles/'))
+    .catch((e)=>{
+        console.log("Erreur :", e);
+        res.status(500).send('Une erreur est survenue :-(');
+    });
+        
+    
 });
 router.use(require('./auth'));
 router.use(require('./auteurs'));

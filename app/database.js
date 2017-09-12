@@ -1,14 +1,16 @@
-var mysql = require("mysql2");
+var mysql = require("mysql2/promise");
 
 class Database{
     constructor(config){
         this.config = config;
-        this.poolCluster = mysql.createPoolCluster();
-        this.poolCluster.add(this.config.name, this.config);
+        this.pool = mysql.createPool(
+            this.config
+        );
+        //this.poolCluster.add(this.config.name, this.config);
     }
 
     connect(handler){
-        this.poolCluster.getConnection(this.config.name, handler);
+        this.pool.getConnection(handler);
     }
 }
 

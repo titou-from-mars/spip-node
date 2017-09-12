@@ -1,17 +1,17 @@
+var mysql = require('mysql2');
 class SpipMeta{
     
     /**
      * Permet d'accéder aux meta spip
-     * @param  {mysql} connection une connection mysql
      * @param  {spipQuery} spipQuery un objet spipQuery
      */
-    constructor(connection,spipQuery){
-        this.connection = connection;
+    constructor(spipQuery){        
         this.spipQuery = spipQuery;
     }
+    
     get(meta){
-        let sql = this.connection.format("SELECT * FROM `spip_meta` WHERE `nom` = ? ", [meta]);        
-        this.spipQuery.query(sql);
+        let sql = mysql.format("SELECT * FROM `spip_meta` WHERE `nom` = ? ", [meta]);        
+        return this.spipQuery.query(sql);
     }
 
     set(meta,value){
@@ -19,11 +19,12 @@ class SpipMeta{
     }
 
     delete(meta){
-
+        let sql = mysql.format("DELETE FROM `spip_meta` WHERE `nom` = ? ", [meta]);        
+        return this.spipQuery.query(sql);
     }
 
-    getAll(){
-
+    getAll(){               
+        return this.spipQuery.query("SELECT * FROM `spip_meta` WHERE 1");
     }
 }
 module.exports = SpipMeta;

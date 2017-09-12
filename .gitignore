@@ -61,3 +61,5 @@ typings/
 tests/spip\.js
 tests/database\.js
 config/connection.json
+
+tests/test-spip-api\.js
