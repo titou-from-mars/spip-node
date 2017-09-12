@@ -27,17 +27,17 @@ var spip = new SPIP(db.pool);
 const strategy = new JwtStrategy(jwtOptions, function (jwt_payload, next) {
     //console.log('payload received', jwt_payload);    
     spip.select('auteur',{criteres:{id_auteur:jwt_payload.id}})
-    self.SPIP.auteurs.get(jwt_payload.id).then((user)=>{
-        user = user[0];
-        if (user) {
-            next(null, user);
-        } else {
-            next(null, false);
-        }
+    .then((user)=>{
+        (user.length)? next(null, user) : next(null, false);
 
-    });
+    })
+    .catch((e)=>{
+        console.log("Erreur dans la stratégie JWT",e);
+        next(e, false);
+    });    
 
 });
+
 passport.use(strategy);
 app.use(passport.initialize());
 
