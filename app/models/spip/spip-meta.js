@@ -8,9 +8,10 @@ class SpipMeta{
     constructor(spipQuery){        
         this.spipQuery = spipQuery;
     }
+    
     get(meta){
         let sql = mysql.format("SELECT * FROM `spip_meta` WHERE `nom` = ? ", [meta]);        
-        this.spipQuery.query(sql);
+        return this.spipQuery.query(sql);
     }
 
     set(meta,value){
@@ -18,11 +19,12 @@ class SpipMeta{
     }
 
     delete(meta){
-
+        let sql = mysql.format("DELETE FROM `spip_meta` WHERE `nom` = ? ", [meta]);        
+        return this.spipQuery.query(sql);
     }
 
-    getAll(){
-
+    getAll(){               
+        return this.spipQuery.query("SELECT * FROM `spip_meta` WHERE 1");
     }
 }
 module.exports = SpipMeta;
