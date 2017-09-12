@@ -3,23 +3,20 @@ var express = require('express'),
     logger = require('morgan'),
     connectionParam = require('./config/connection.json'),
     database = require('./app/database.js'),
-    spip = require('./app/models/spip/spip.js');
+    spip = require('./app/models/spip/spip.js'),
+    spipMiddleware = require('./app/middlewares/inject-spip.js');
 var app = express();
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(require('./app/routes'));
 
+
 //conection à la base
 var db = new database(connectionParam);
-var connection;
-db.connect((err,con)=>{
-    if(err) console.log("Erreur", err);
-    else{
-        console.log("connection à Mysql réussie !");
-        connection = con;
-    }
-});
+app.use(spipMiddleware(db.pool));
+//console.log("spipMiddleware",spipMiddleware(connectionParam));
+
 
 app.listen(3000,()=>{
     //console.log('Serveur SPIP-Node écoute sur le port 3000');
