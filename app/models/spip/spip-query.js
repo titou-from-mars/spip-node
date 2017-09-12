@@ -21,7 +21,7 @@ class SpipQuery{
                 return res;
             })
             .then((result)=>{
-                console.log(result);
+               // console.log(result);
                 return result[0];
             })
             .catch((err)=>{
