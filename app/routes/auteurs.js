@@ -5,9 +5,9 @@ router = express.Router();
  * Les auteurs répondent ne sont pas traité comme un collection comme les autres.
  */
 
-router.get('/auteur/:id',function(req,res){
+/*router.get('/auteur/:id',function(req,res){
     //recupère un auteur
-});
+});*/
 
 router.get('/auteurs', function(req,res){
     //récupère une sélection d'auteurs
