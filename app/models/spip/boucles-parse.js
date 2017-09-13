@@ -10,24 +10,31 @@ module.exports = {
                     set = null
                     },
                     callback){
+        console.log("init");
         let query = {};
-        query.set = set;
-        query.raw = {boucle:boucle, balises:balises,liens:liens, id:id, criteres:criteres,set:set };
-        query.isJointure = false;
-        
-        query.isCount = false;
-        query.isCrit = (query.raw.criteres && !tools.isEmpty(query.raw.criteres));
-        
-        query.boucle_join = null;        
-        
-        query.liens = null;    
-        ///query.boucle = query.raw.boucle;
         let error = null;
-        (query.raw.boucle && spip_boucles.hasOwnProperty(query.raw.boucle))? query.boucle = spip_boucles[query.raw.boucle] : query.boucle = null;
-        
-        callback(null,query);
+        //On vérifie que la boucle existe
+        if(!spip_boucles.hasOwnProperty(boucle)) {
+            error = new Error(boucle+" n'existe pas");
+            console.log("il n'y a pas de collection "+boucle);            
+        }else{                  
+            query.set = set;
+            query.raw = {boucle:boucle, balises:balises,liens:liens, id:id, criteres:criteres,set:set };
+            query.isJointure = false;
+            
+            query.isCount = false;
+            query.isCrit = (query.raw.criteres && !tools.isEmpty(query.raw.criteres));
+            
+            query.boucle_join = null;        
+            
+            query.liens = null;    
+            ///query.boucle = query.raw.boucle;        
+            query.boucle = spip_boucles[query.raw.boucle];
+        }
+        callback(error,query);
     },
     limit:function(query,callback){
+        console.log("limit");
         if (query.raw.criteres && query.raw.criteres.hasOwnProperty("limit")) {
             query.limit = query.raw.criteres.limit;
             delete query.raw.criteres.limit;
@@ -38,6 +45,7 @@ module.exports = {
     },
 
     balises:function(query,callback){
+        console.log("balises");
         // si on on a précisé le critère count, il écrase tout autre indication sur les balises
         if (query.raw.criteres && query.raw.criteres.hasOwnProperty("count") && query.raw.criteres.count === true) {
             //console.log("balises count");
@@ -56,6 +64,7 @@ module.exports = {
         callback(null,query);
     },
     jointures:function(query,callback){
+        console.log("jointures");
         /**
          * Les jointures automatique
          */
@@ -93,12 +102,14 @@ module.exports = {
     },
 
     criteres:function(query,callback){
+        console.log("criteres");
         if (!query.raw.criteres || tools.isEmpty(query.raw.criteres)) query.raw.criteres = 1;
         query.criteres = query.raw.criteres;
         callback(null,query);
     },
 
     liens:function(query,callback){
+        console.log("liens");
         if(query.raw.liens && query.raw.id){
             
              query.liens = [];

@@ -30,7 +30,7 @@ router.patch('/:collection/:id',function(req,res){
         console.log('retour',retour);
         res.send(retour);
     })
-    .catch((e)=>console.log("Erreur ",e));
+    .catch((e)=>res.status(404).send(e.message));
 });
 
 router.delete('/:collection/:id',function(req,res){

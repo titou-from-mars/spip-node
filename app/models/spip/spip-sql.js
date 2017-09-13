@@ -5,7 +5,7 @@ module.exports = {
     },
 
     select:function(query,callback){
-        //console.log("SELECT");
+        console.log("SELECT");
         // console.log("query:\n",query);
         // console.log("this:",this);
          query.sql = "SELECT " + query.balises + " FROM  ??";
@@ -23,7 +23,7 @@ module.exports = {
      * @return {string} - une  portion de requête sql utilisable dans une clause WHERE
      */
      where:function (query,callback) {
-        //console.log("WHERE");
+        console.log("WHERE");
         if (query.isJointure && query.criteres) query.sql += " AND ";  
         if (query.criteres === 1) query.sql +=  " 1 ";
         else{
@@ -39,20 +39,20 @@ module.exports = {
     },
 
     groupby:function(query,callback){
-        //console.log("GROUP BY");
+        console.log("GROUP BY");
         query.sql += " GROUP BY " + query.boucle.table + "." + query.boucle.id + " LIMIT " + query.limit;
         callback(null,query);
 
     },
 
     update:function(query,callback){
-        //console.log("UPDATE");
+        console.log("UPDATE");
         query.sql = mysql.format("UPDATE ?? ", [query.boucle.table]);
         callback(null,query);
     },
     
     set:function(query,callback){
-        //console.log("SET");
+        console.log("SET");
         if(query.boucle.maj){
             if(query.set && !query.set.hasOwnProperty("maj") ) query.set['maj'] = 'NOW()';
             else if(!query.set) query.set = {maj:'NOW()'};
@@ -75,7 +75,7 @@ module.exports = {
     },
 
     insert:function(query, callback){
-        //console.log("INSERT");
+        console.log("INSERT");
         query.sql = mysql.format("INSERT INTO ?? SET ?", [query.boucle.table, query.set]);
         callback(null,query);
     },
@@ -87,7 +87,7 @@ module.exports = {
      * @return {string} - une portion de code sql correspondant à la jointure
      */
      join:function (query,callback) {
-        //console.log("JOIN");
+        console.log("JOIN");
         //on construit la requête
         if(query.isJointure) {    
             
@@ -109,7 +109,7 @@ module.exports = {
     },
 
     delete:function(query,callback){
-        //console.log("DELETE");
+        console.log("DELETE");
         query.sql = mysql.format("DELETE ?? FROM  ?? ",[query.boucle.table,query.boucle.table]) ;
         callback(null, query);
 
