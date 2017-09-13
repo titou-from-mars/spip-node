@@ -63,3 +63,4 @@ tests/database\.js
 config/connection.json
 
 config/security\.json
+tests/test-spip-api.js
