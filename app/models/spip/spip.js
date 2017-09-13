@@ -172,10 +172,10 @@ Spip.prototype.update = function (boucle = throwIfMissing(), {set = null, criter
                 (callback)=>parse.init({boucle:boucle, criteres:criteres,set:set},callback),
                 parse.jointures,
                 parse.criteres,
-                format.update,
-                format.join,
-                format.where,
+                format.update,                
                 format.set,  
+                format.join,
+                format.where,                
                 this.sendQuery.bind(this)          
             ],
             function(err,result){                
