@@ -1,5 +1,6 @@
 var express = require('express'), 
-    router = express.Router();
+    router = express.Router(),
+    passport = require("passport");
 
 router.get('/',function(req,res,next){
     req.spip.meta.get('nom_site')
@@ -7,11 +8,14 @@ router.get('/',function(req,res,next){
     .catch((e)=>{
         console.log("Erreur :", e);
         res.status(500).send('Une erreur est survenue :-(');
-    });
-        
+    });        
     
 });
+
 router.use(require('./auth'));
+
+//Toutes les routes après cette ligne nécessiterons une identification
+router.use(passport.authenticate('jwt', { session: false }));
 router.use(require('./auteurs'));
 router.use(require('./publication'));
 router.use(require('./collection'));

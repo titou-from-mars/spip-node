@@ -1,8 +1,7 @@
 var express = require('express'),
-    passport = require("passport"),
     router = express.Router();
 
-router.get('/:collection/:id',passport.authenticate('jwt', { session: false }),function(req,res){
+router.get('/:collection/:id',function(req,res){
     //recupère un élément d'une collection SPIP.
     console.log("get /",req.params.collection,'/',req.params.id);
     let id = {};
