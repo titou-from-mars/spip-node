@@ -10,7 +10,7 @@ jwtOptions.secretOrKey = require('../../config/security.json').secretOrKey;
 module.exports = function(spip){
     return new JwtStrategy(jwtOptions, function (jwt_payload, next) {
         //console.log('payload received', jwt_payload);    
-        spip.select('auteur',{criteres:{id_auteur:jwt_payload.id}})
+        spip.select('auteur',{balises:"id_auteur",criteres:{id_auteur:jwt_payload.id}})
         .then((user)=>{
             (user.length)? next(null, user) : next(null, false);
     
