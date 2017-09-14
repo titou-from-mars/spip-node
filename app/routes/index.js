@@ -18,8 +18,9 @@ router.use(require('./auth'));
 router.use(passport.authenticate('jwt', { session: false }));
 router.use(require('./auteurs'));
 router.use(require('./publication'));
-router.use(require('./collection'));
 router.use(require('./collections'));
+router.use(require('./collection'));
+
 
 //404
 router.all('*', function(req, res){
