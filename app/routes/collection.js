@@ -8,9 +8,21 @@ router.get('/:collection/:id',function(req,res){
     id["id_"+req.params.collection] = req.params.id;
     req.spip.select(req.params.collection,{criteres:id})
     .then((retour)=>{
-        (retour.length)? res.send(retour) : res.status(404).send();        
+        (retour.length)? res.json(
+            {
+                "status":"success",
+                "data":retour
+            }
+        ) : res.status(404).json({
+                "status":"fail",
+                "data":null
+        });        
     })
-    .catch((e)=> res.status(404).send(e.message));
+    .catch((e)=> res.status(404).json(
+        {
+            "status":"error",
+            "message":e.message
+        }));
     
 });
 
@@ -28,9 +40,18 @@ router.patch('/:collection/:id',function(req,res){
     req.spip.update(req.params.collection,query)
     .then((retour)=>{
         console.log('retour',retour);
-        res.send(retour);
+        res.json(
+            {
+                "status":"success",
+                "data":retour
+            });
     })
-    .catch((e)=>res.status(404).send(e.message));
+    .catch((e)=>res.status(404).json(
+            {
+                "status":"error",
+                "data":e.message
+            })
+    );
 });
 
 router.delete('/:collection/:id',function(req,res){

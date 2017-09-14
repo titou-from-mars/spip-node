@@ -15,17 +15,25 @@ router.post('/login',function(req,res){
             };
             var token = jwt.sign(payload, secretOrKey);
             res.json({
-                message: "ok",
-                token: token
+                status: "success",
+                data:{"token": token}
             });
         } else {
             res.status(401).json({
-                message: "login & passwords dont match"
+                status:"fail",
+                data:{ "reason":"Il y a 1 erreur dans votre saisie, veuillez vérifier les informations."}
             });
         }
 
     })
-    .catch((e)=>console.log("ça plante :-( ",e));
+    .catch((e)=>{
+        console.log("ça plante :-( ",e);
+        //on reste vague dans le message transmis
+        res.status(500).json({
+            "status":"error",
+            "message":"Un problème est survenu lors de votre authentification"
+        });
+    });
 });
 
 router.post('/logout',function(req,res){
