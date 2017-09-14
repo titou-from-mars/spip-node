@@ -25,8 +25,28 @@ router.get('(/:collection){1}s/:criteres',function(req,res){
 });
 
 
-router.patch('/:collection',function(req,res){
+router.patch('(/:collection){1}s/:criteres',function(req,res){
     //met à jour des éléments
+    validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
+
+    let query = JSON.parse(req.params.criteres);
+    query['set'] = req.body;
+    
+        req.spip.update(req.params.collection,query)
+        .then((retour)=>{
+            //console.log('retour',retour);
+            res.json(
+                {
+                    "status":"success",
+                    "data":retour
+                });
+        })
+        .catch((e)=>res.status(404).json(
+                {
+                    "status":"error",
+                    "message":e.message
+                })
+        );
 });
 
 router.delete('/:collection',function(req,res){
