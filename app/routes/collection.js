@@ -1,7 +1,9 @@
 var express = require('express'),
     router = express.Router();
 
-router.get('/:collection/:id',function(req,res){
+// L'expression régulière permet de ne traiter que les cas ou :id est un nombre
+// https://stackoverflow.com/questions/11258442/express-routes-parameter-conditions
+router.get('/:collection/:id(\\d+)/',function(req,res){
     //recupère un élément d'une collection SPIP.
     console.log("get /",req.params.collection,'/',req.params.id);
     let id = {};
@@ -46,7 +48,7 @@ router.post('/:collection',function(req,res){
     );
 });
 
-router.patch('/:collection/:id',function(req,res){
+router.patch('/:collection/:id(\\d+)/',function(req,res){
     //met à jour un élément    
     let query = req.body;    
     query['criteres']={};    
@@ -69,7 +71,7 @@ router.patch('/:collection/:id',function(req,res){
     );
 });
 
-router.delete('/:collection/:id',function(req,res){
+router.delete('/:collection/:id(\\d+)/',function(req,res){
     //supprime un élément
     let query = {};
     query['criteres']={};    
