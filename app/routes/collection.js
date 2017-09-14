@@ -41,7 +41,7 @@ router.post('/:collection',function(req,res){
     .catch((e)=>res.status(404).json(
             {
                 "status":"error",
-                "data":e.message
+                "message":e.message
             })
     );
 });
@@ -64,7 +64,7 @@ router.patch('/:collection/:id',function(req,res){
     .catch((e)=>res.status(404).json(
             {
                 "status":"error",
-                "data":e.message
+                "message":e.message
             })
     );
 });
@@ -87,7 +87,7 @@ router.delete('/:collection/:id',function(req,res){
     .catch((e)=>res.status(404).json(
             {
                 "status":"error",
-                "data":e.message
+                "message":e.message
             })
     );
 });
