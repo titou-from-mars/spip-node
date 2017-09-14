@@ -2,7 +2,9 @@ var express = require('express'),
 router = express.Router();
 
 
-router.get('/:collection',function(req,res){
+router.get('/:collection(.*s$)/',function(req,res){
+    console.log("collectionS");
+    res.send("demande d'une collectionS");
     //recupère des éléments d'une collection SPIP.
 });
 
