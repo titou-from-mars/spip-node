@@ -10,7 +10,7 @@ router.get('/:collection/:id',function(req,res){
     .then((retour)=>{
         (retour.length)? res.send(retour) : res.status(404).send();        
     })
-    .catch((e)=> res.status(500).send('Une erreur est survenue :-('));
+    .catch((e)=> res.status(404).send(e.message));
     
 });
 
