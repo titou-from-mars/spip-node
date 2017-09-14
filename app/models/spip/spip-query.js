@@ -25,8 +25,8 @@ class SpipQuery{
                 return result[0];
             })
             .catch((err)=>{
-                console.log(err);
-                return err;
+                console.log(err.message);
+                return Promise.reject(err);
             });
            
         
