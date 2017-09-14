@@ -21,4 +21,11 @@ router.use(require('./publication'));
 router.use(require('./collection'));
 router.use(require('./collections'));
 
+//404
+router.all('*', function(req, res){
+    res.status(404).send("Ressource inconnue");
+});
+
+
+
 module.exports = router;
