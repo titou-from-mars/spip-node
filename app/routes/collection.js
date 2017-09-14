@@ -27,8 +27,23 @@ router.get('/:collection/:id',function(req,res){
 });
 
 router.post('/:collection',function(req,res){
-    //créé un nouvel élément    
-    res.send('créé un '+req.params.collection);
+    //créé un nouvel élément        
+
+    req.spip.insert(req.params.collection,req.body)
+    .then((retour)=>{
+        console.log('retour',retour);
+        res.json(
+            {
+                "status":"success",
+                "data":retour
+            });
+    })
+    .catch((e)=>res.status(404).json(
+            {
+                "status":"error",
+                "data":e.message
+            })
+    );
 });
 
 router.patch('/:collection/:id',function(req,res){
