@@ -71,7 +71,25 @@ router.patch('/:collection/:id',function(req,res){
 
 router.delete('/:collection/:id',function(req,res){
     //supprime un élément
-    res.send('supprime '+req.params.collection+" id "+req.params.id);
+    let query = {};
+    query['criteres']={};    
+    query['criteres']['id_'+req.params.collection] = req.params.id;     
+
+    req.spip.delete(req.params.collection,query)
+    .then((retour)=>{
+        console.log('retour',retour);
+        res.json(
+            {
+                "status":"success",
+                "data":retour
+            });
+    })
+    .catch((e)=>res.status(404).json(
+            {
+                "status":"error",
+                "data":e.message
+            })
+    );
 });
 
 module.exports = router;
