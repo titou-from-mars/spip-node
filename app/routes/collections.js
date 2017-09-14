@@ -49,8 +49,25 @@ router.patch('(/:collection){1}s/:criteres',function(req,res){
         );
 });
 
-router.delete('/:collection',function(req,res){
+router.delete('(/:collection){1}s/:criteres',function(req,res){
     //supprime des éléments
+    validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
+    
+        req.spip.delete(req.params.collection,JSON.parse(req.params.criteres))
+        .then((retour)=>{
+            //console.log('retour',retour);
+            res.json(
+                {
+                    "status":"success",
+                    "data":retour
+                });
+        })
+        .catch((e)=>res.status(404).json(
+                {
+                    "status":"error",
+                    "message":e.message
+                })
+        );
 });
 
 module.exports = router;
