@@ -1,18 +1,12 @@
-var express = require('express'), 
-router = express.Router();
+const express = require('express'), 
+      validate = require('./validate-routes.js'),  
+      router = express.Router();
 
 router.get('(/:collection){1}s/:criteres',function(req,res){
-    console.log("réqcupère collections ",req.params.collection, "criteres",req.params.criteres);    
-    //recupère des éléments d'une collection SPIP.
-    let query;
-    try{
-        query = JSON.parse(req.params.criteres);
-    }catch(e){
-        res.status(400).json({
-            "status":"error",
-            "message":"Le parametre n'est pas un JSON valide"
-        });
-    }
+    //recupère des éléments d'une collection SPIP.       
+    
+    validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
+
     req.spip.select(req.params.collection,JSON.parse(req.params.criteres))
     .then((retour)=>{
         //console.log('retour',retour);
