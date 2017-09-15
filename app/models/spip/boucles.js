@@ -34,6 +34,14 @@ module.exports = {
         jointures:null,
         maj:true        
     },
+    groupes_mot:{
+        table:"spip_groupes_mots",
+        table_jointures:null,
+        nom:"groupes_mot",
+        id:"id_groupe",
+        jointures:null,
+        maj:true
+    },
     document:{
         table:"spip_documents",
         table_jointures:"spip_documents_liens",       
