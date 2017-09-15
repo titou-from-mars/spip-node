@@ -1,7 +1,7 @@
 const boucles = require('../../models/spip/boucles');
 let instance = null;
 /**
- * Classe singleton avec deux propriétés :
+ * Classe singleton pour générer des pattern compatible express, définissant des routes valides, en fonction de la classe boucle de la lib Spip.
  * @property {string} route - pattern regex express des routes valides correspondant à des boucles spip
  * @property {string} routes - pattern regex express des routes valides au pluriel correspondant à des boucles spip
  * 
@@ -9,7 +9,7 @@ let instance = null;
  */
 class ValidRoutes{
     constructor(){       
-        if(!instance) {
+        if(!instance) {           
             instance = this;
             this.route = "(", this.routes = "(";
             let first=true;
@@ -24,7 +24,7 @@ class ValidRoutes{
             }
             this.route +=")";
             this.routes +=")"; 
-        }
+        }        
         return instance;
     }
     
