@@ -1,5 +1,5 @@
 const express = require('express'), 
-      validate = require('./validate-routes.js'),  
+      validate = require('./validate/valid-parameters.js'),  
       router = express.Router();
 
 router.get('(/:collection){1}s/:criteres',function(req,res){
