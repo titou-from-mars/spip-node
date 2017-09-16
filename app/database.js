@@ -3,6 +3,7 @@ var mysql = require("mysql2/promise");
 class Database{
     constructor(config){
         this.config = config;
+        this.config['multipleStatements'] = true;
         this.pool = mysql.createPool(
             this.config
         );
