@@ -2,6 +2,7 @@ const express = require('express'),
     router = express.Router();
     boucles = require('../models/spip/boucles.js');
     ValidRoutes = require('./validate/valid-routes.js');
+    validParams = require('./validate/valid-parameters.js');
 
 const validRoutes = new ValidRoutes();
 
@@ -53,7 +54,7 @@ router.post('/:collection'+validRoutes.route,function(req,res){
     );
 });
 
-router.patch('/:collection/:id(\\d+)/mot/:id_mot',function(req,res){});
+
 router.patch('/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
     //met à jour un élément    
     let query = req.body;    
@@ -99,5 +100,39 @@ router.delete('/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
             })
     );
 });
+
+
+/**
+ * Ajoute à l'élement d'une collection @collection dont l'id @id est fourni en paramètre, un ou plusieurs mots-clef correspondant aux id @ids_mot
+ * @example - PATCH /article/55/ajouter/{"id_mot":[22,5],"id_auteur":2}  //ajoute les mots-clefs 22 et 5, ainsi que l'auteur 2 à l'article 55 
+ * @param {string} collection - Le nom de la collection (ex : article, rubrique...)
+ * @param {int} id - L'id correspondant à l'élement ciblé
+ * @param {int|array} ids_mot - Le ou les id des mots clefs à ajouter à l'élement  
+ */
+router.patch('/:collection/:id(\\d+)/ajouter/:ids',function(req,res){
+    validParams.mustBeJSON(req.params.ids,res);
+    let query = {};
+    query['liens'] = JSON.parse(req.params.ids);    
+    query["id"] = req.params.id;
+    console.log("query:",query);
+    req.spip.associer(req.params.collection,query)
+    .then((retour)=>{
+        console.log("retour:",retour);
+        res.json(
+            {
+                "status":"success",
+                "data":retour,
+            }
+        )
+    })
+    .catch((e)=>res.status(500).json(
+        {
+            "status":"error",
+            "message":e.message
+        }
+    ));
+
+});    
+
 
 module.exports = router;
