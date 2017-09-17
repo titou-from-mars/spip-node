@@ -10,16 +10,16 @@ const validRoutes = new ValidRoutes();
 /**
  * récupère les élemnents liés au mot-clef dont l'id est donnés en parametres
  */
-router.get('(/:collection'+validRoutes.route+'){1}s/mot/:id_mot(\\d+)/',function(req,res){     
-    res.redirect('/'+req.params.collection+'s/{"criteres":{"id_mot":'+req.params.id_mot+'}}');
+router.get('(/:boucle'+validRoutes.route+'){1}s/mot/:id_mot(\\d+)/',function(req,res){     
+    res.redirect('/'+req.params.boucle+'s/{"criteres":{"id_mot":'+req.params.id_mot+'}}');
 });
 
 /**
- * Récupère les mots-clefs liés à l'élément dont l'id et la collection sont donnés en paramètre
+ * Récupère les mots-clefs liés à l'élément dont l'id et la boucle sont donnés en paramètre
  */
-router.get('/mots/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
-    console.log("json",'/mots/{"criteres":{"id_'+req.params.collection+'":'+req.params.id+'}}')
-    res.redirect('/mots/{"criteres":{"id_'+req.params.collection+'":'+req.params.id+'}}');
+router.get('/mots/:boucle'+validRoutes.route+'/:id(\\d+)/',function(req,res){
+    console.log("json",'/mots/{"criteres":{"id_'+req.params.boucle+'":'+req.params.id+'}}')
+    res.redirect('/mots/{"criteres":{"id_'+req.params.boucle+'":'+req.params.id+'}}');
 });
 
 
@@ -28,15 +28,15 @@ router.get('/mots/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res)
 /**
  * récupère les élemnents liés au mot-clef à l'auteur dont l'id est donnés en parametres
  */
-router.get('(/:collection'+validRoutes.route+'){1}s/auteur/:id_auteur(\\d+)/',function(req,res){     
-    res.redirect('/'+req.params.collection+'s/{"criteres":{"id_auteur":'+req.params.id_auteur+'}}');
+router.get('(/:boucle'+validRoutes.route+'){1}s/auteur/:id_auteur(\\d+)/',function(req,res){     
+    res.redirect('/'+req.params.boucle+'s/{"criteres":{"id_auteur":'+req.params.id_auteur+'}}');
 });
 
 /**
- * Récupère les auteurs liés à l'élément dont l'id et la collection sont donnés en paramètre
+ * Récupère les auteurs liés à l'élément dont l'id et la boucle sont donnés en paramètre
  */
-router.get('/auteurs/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
-    res.redirect('/auteurs/{"criteres":{"id_'+req.params.collection+'":'+req.params.id+'}}');
+router.get('/auteurs/:boucle'+validRoutes.route+'/:id(\\d+)/',function(req,res){
+    res.redirect('/auteurs/{"criteres":{"id_'+req.params.boucle+'":'+req.params.id+'}}');
 });
 
 module.exports = router;

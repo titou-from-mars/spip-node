@@ -2,20 +2,20 @@ const express = require('express'),
     router = express.Router();    
     ValidRoutes = require('./validate/valid-routes.js');
     validParams = require('./validate/valid-parameters.js');
-    boucles = require('../models/spip/boucles.js');
+    definitions = require('../models/spip/boucles.js').definitions;
 
 const validRoutes = new ValidRoutes();
 
 console.log("routes pattern :",validRoutes.route);
 // L'expression régulière permet de ne traiter que les cas ou :id est un nombre
 // https://stackoverflow.com/questions/11258442/express-routes-parameter-conditions
-router.get('/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
-    //recupère un élément d'une collection SPIP.
-    console.log("get /",req.params.collection,'/',req.params.id);
+router.get('/:boucle'+validRoutes.route+'/:id(\\d+)/',function(req,res){
+    //recupère un élément d'une boucle SPIP.
+    console.log("get /",req.params.boucle,'/',req.params.id);
     let id = {};
-    let id_name = boucles.definitions[req.params.collection].id;
+    let id_name = definitions[req.params.boucle].id;
     id[id_name] = req.params.id;
-    req.spip.select(req.params.collection,{criteres:id})
+    req.spip.select(req.params.boucle,{criteres:id})
     .then((retour)=>{
         (retour.length)? res.json(
             {
@@ -35,10 +35,10 @@ router.get('/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
     
 });
 
-router.post('/:collection'+validRoutes.route,function(req,res){
+router.post('/:boucle'+validRoutes.route,function(req,res){
     //créé un nouvel élément        
 
-    req.spip.insert(req.params.collection,req.body)
+    req.spip.insert(req.params.boucle,req.body)
     .then((retour)=>{
         console.log('retour',retour);
         res.json(
@@ -56,13 +56,13 @@ router.post('/:collection'+validRoutes.route,function(req,res){
 });
 
 
-router.patch('/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
+router.patch('/:boucle'+validRoutes.route+'/:id(\\d+)/',function(req,res){
     //met à jour un élément    
     let query = req.body;    
     query['criteres']={}; 
-    let id_name = boucles.definitions[req.params.collection].id;
+    let id_name = definitions[req.params.boucle].id;
     query['criteres'][id_name] = req.params.id;
-    req.spip.update(req.params.collection,query)
+    req.spip.update(req.params.boucle,query)
     .then((retour)=>{
         console.log('retour',retour);
         res.json(
@@ -79,14 +79,14 @@ router.patch('/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
     );
 });
 
-router.delete('/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
+router.delete('/:boucle'+validRoutes.route+'/:id(\\d+)/',function(req,res){
     //supprime un élément
     let query = {};
     query['criteres']={};        
-    let id_name = boucles.definitions[req.params.collection].id;
+    let id_name = definitions[req.params.boucle].id;
     query['criteres'][id_name] = req.params.id;    
 
-    req.spip.delete(req.params.collection,query)
+    req.spip.delete(req.params.boucle,query)
     .then((retour)=>{
         console.log('retour',retour);
         res.json(
@@ -105,19 +105,19 @@ router.delete('/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
 
 
 /**
- * Ajoute à l'élement d'une collection @collection dont l'id @id est fourni en paramètre, un ou plusieurs mots-clef correspondant aux id @ids_mot
+ * Ajoute à l'élement d'une boucle @boucle dont l'id @id est fourni en paramètre, un ou plusieurs mots-clef correspondant aux id @ids_mot
  * @example - PATCH /article/55/ajouter/{"id_mot":[22,5],"id_auteur":2}  //ajoute les mots-clefs 22 et 5, ainsi que l'auteur 2 à l'article 55 
- * @param {string} collection - Le nom de la collection (ex : article, rubrique...)
+ * @param {string} boucle - Le nom de la boucle (ex : article, rubrique...)
  * @param {int} id - L'id correspondant à l'élement ciblé
  * @param {json} ids_mot - Le ou les id des mots clefs à ajouter à l'élement  
  */
-router.patch('/:collection/:id(\\d+)/ajouter/:ids',function(req,res){
+router.patch('/:boucle/:id(\\d+)/ajouter/:ids',function(req,res){
     validParams.mustBeJSON(req.params.ids,res);
     let query = {};
     query['liens'] = JSON.parse(req.params.ids);    
     query["id"] = req.params.id;
     console.log("query:",query);
-    req.spip.associer(req.params.collection,query)
+    req.spip.associer(req.params.boucle,query)
     .then((retour)=>{
         console.log("retour:",retour);
         res.json(
@@ -136,13 +136,13 @@ router.patch('/:collection/:id(\\d+)/ajouter/:ids',function(req,res){
 
 });    
 
-router.patch('/:collection/:id(\\d+)/retirer/:ids',function(req,res){
+router.patch('/:boucle/:id(\\d+)/retirer/:ids',function(req,res){
     validParams.mustBeJSON(req.params.ids,res);
     let query = {};
     query['liens'] = JSON.parse(req.params.ids);    
     query["id"] = req.params.id;
     console.log("query:",query);
-    req.spip.dissocier(req.params.collection,query)
+    req.spip.dissocier(req.params.boucle,query)
     .then((retour)=>{
         console.log("retour:",retour);
         res.json(

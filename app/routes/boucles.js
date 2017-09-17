@@ -5,10 +5,10 @@ const express = require('express'),
 
 const validRoutes = new ValidRoutes();
 
-router.get('(/:collection'+validRoutes.route+'){1}s/:criteres',function(req,res){
-    //recupère des éléments d'une collection SPIP. 
+router.get('(/:boucle'+validRoutes.route+'){1}s/:criteres',function(req,res){
+    //recupère des éléments d'une boucle SPIP. 
     validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
-    req.spip.select(req.params.collection,JSON.parse(req.params.criteres))
+    req.spip.select(req.params.boucle,JSON.parse(req.params.criteres))
     .then((retour)=>{
         //console.log('retour',retour);
         res.json(
@@ -26,7 +26,7 @@ router.get('(/:collection'+validRoutes.route+'){1}s/:criteres',function(req,res)
 });
 
 
-router.patch('(/:collection'+validRoutes.route+'){1}s/:criteres',function(req,res){
+router.patch('(/:boucle'+validRoutes.route+'){1}s/:criteres',function(req,res){
     //met à jour des éléments
     
     validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
@@ -34,7 +34,7 @@ router.patch('(/:collection'+validRoutes.route+'){1}s/:criteres',function(req,re
     let query = JSON.parse(req.params.criteres);
     query['set'] = req.body;
     
-        req.spip.update(req.params.collection,query)
+        req.spip.update(req.params.boucle,query)
         .then((retour)=>{
             //console.log('retour',retour);
             res.json(
@@ -51,11 +51,11 @@ router.patch('(/:collection'+validRoutes.route+'){1}s/:criteres',function(req,re
         );
 });
 
-router.delete('(/:collection'+validRoutes.route+'){1}s/:criteres',function(req,res){
+router.delete('(/:boucle'+validRoutes.route+'){1}s/:criteres',function(req,res){
     //supprime des éléments
     validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
     
-        req.spip.delete(req.params.collection,JSON.parse(req.params.criteres))
+        req.spip.delete(req.params.boucle,JSON.parse(req.params.criteres))
         .then((retour)=>{
             //console.log('retour',retour);
             res.json(

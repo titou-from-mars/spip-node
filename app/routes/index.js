@@ -4,7 +4,7 @@ var express = require('express'),
 
 router.get('/',function(req,res,next){
     req.spip.meta.get('nom_site')
-    .then((retour)=>res.send('Bienvenue sur le serveur '+retour[0].valeur+'. Merci  de choisir une collection SPIP, ex, /articles/'))
+    .then((retour)=>res.send('Bienvenue sur le serveur '+retour[0].valeur+'. Merci  de choisir une boucle SPIP, ex, /articles/'))
     .catch((e)=>{
         console.log("Erreur :", e);
         res.status(500).send('Une erreur est survenue :-(');
@@ -19,8 +19,8 @@ router.use(passport.authenticate('jwt', { session: false }));
 router.use(require('./auteurs'));
 router.use(require('./raccourci.js'));
 router.use(require('./publication'));
-router.use(require('./collections'));
-router.use(require('./collection'));
+router.use(require('./boucles'));
+router.use(require('./boucle'));
 
 
 //404
