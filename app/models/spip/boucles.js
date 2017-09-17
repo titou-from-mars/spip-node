@@ -1,74 +1,28 @@
-/**
- * On peut imaginer que cet objet soit construit en fonction de la configuration de spip, en lisant la table spip_meta
- */
-module.exports = {   
-    article:{       
-        jointures:{
-            id_mot:"mot",
-            id_auteur:"auteur",
-            id_document:"document"
-        },
-        table:"spip_articles",
-        table_jointures:null,        
-        nom:"article",
-        id:"id_article", 
-        maj:true
-    },
-    rubrique:{       
-        jointures:{
-            id_mot:"mot",
-            id_auteur:"auteur",
-            id_document:"document"
-        },
-        table:"spip_rubriques",
-        table_jointures:null,        
-        nom:"rubrique",
-        id:"id_rubrique", 
-        maj:true
-    },
-    mot:{
-        table:"spip_mots",
-        table_jointures:"spip_mots_liens",       
-        nom:"mot",
-        id:"id_mot",       
-        jointures:null,
-        maj:true        
-    },
-    groupes_mot:{
-        table:"spip_groupes_mots",
-        table_jointures:null,
-        nom:"groupes_mot",
-        id:"id_groupe",
-        jointures:null,
-        maj:true
-    },
-    document:{
-        table:"spip_documents",
-        table_jointures:"spip_documents_liens",       
-        nom:"document",
-        id:"id_document",       
-        jointures:null,
-        maj:true        
-    },
-    auteur:{
-        table:"spip_auteurs",
-        table_jointures:"spip_auteurs_liens",       
-        nom:"auteur",
-        id:"id_auteur",       
-        jointures:null,
-        maj:true 
+const fs = require('fs');
+const path = '../../../config/'; 
 
-    },
-    breve:{ 
-        table:"spip_breves",       
-        jointures:{
-            id_mot:"mot",
-            id_auteur:"auteur",
-            id_document:"document"
-        },
-        table_jointures:null,        
-        nom:"breve",
-        id:"id_breve",
-        maj:true
+let instance = null;
+
+class Boucles{
+
+    constructor(){
+        if(!instance){
+            console.log("new object Boucles");
+            instance = this;
+            if(fs.existsSync(path+'boucles.json')){   //on peut surcharger la définition par défaut pour ajouter ses propres boucles             
+                this.definitions = require(path+'boucles.json');
+            }else{                
+                this.definitions = require(path+'boucles-dist.json');
+            }
+            
+        }else{
+            console.log("on renvoit le même object Boucles");
+            return instance;
+        }
     }
+
 }
+
+const boucles = new Boucles();
+module.exports = boucles;
+

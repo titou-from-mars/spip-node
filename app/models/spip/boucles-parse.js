@@ -1,5 +1,5 @@
 var tools = require('../../helpers/utils.js');
-var spip_boucles = require('./boucles.js');
+var spip_boucles = require('./boucles.js').definitions;
 module.exports = {
     init:function({
                     boucle = tools.throwIfMissing(),

@@ -13,7 +13,7 @@ class ValidRoutes{
             instance = this;
             this.route = "(", this.routes = "(";
             let first=true;
-            for(let p in boucles){
+            for(let p in boucles.definitions){
                 if(first) first = false;
                 else{
                     this.route+="|";

@@ -1,6 +1,5 @@
 const express = require('express'),
 router = express.Router();
-boucles = require('../models/spip/boucles.js');
 ValidRoutes = require('./validate/valid-routes.js');
 validParams = require('./validate/valid-parameters.js');
 
