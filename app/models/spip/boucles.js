@@ -18,6 +18,7 @@ class Boucles{
             this.compil();
             
         }
+        console.log("return instance");
         return instance;
     }
 
@@ -25,14 +26,14 @@ class Boucles{
         console.log("compil----------");
 
         for(let boucle in this.definitions){            
-            console.log(this.definitions[boucle].jointures);
+            //console.log(this.definitions[boucle].jointures);
             if(this.definitions[boucle].jointures){
 
                 let id_boucle =  this.definitions[boucle].id;
                 for(let join in this.definitions[boucle].jointures){
                     //this.definitions[boucle]
                     let boucle_join = this.definitions[boucle].jointures[join];                    
-                    console.log("join:"+join);
+                    //console.log("join:"+join);
                     if(!this.definitions[boucle_join]['jointuresInverses']) this.definitions[boucle_join]['jointuresInverses'] = {};
                     this.definitions[boucle_join].jointuresInverses[id_boucle] = boucle;
                 }
@@ -40,7 +41,7 @@ class Boucles{
             }
         }
 
-        console.log(this.definitions);
+        //console.log(this.definitions);
         console.log("----------end compil");
 
     }

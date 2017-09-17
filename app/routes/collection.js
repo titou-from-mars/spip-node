@@ -2,6 +2,7 @@ const express = require('express'),
     router = express.Router();    
     ValidRoutes = require('./validate/valid-routes.js');
     validParams = require('./validate/valid-parameters.js');
+    boucles = require('../models/spip/boucles.js');
 
 const validRoutes = new ValidRoutes();
 
@@ -12,7 +13,8 @@ router.get('/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
     //recupère un élément d'une collection SPIP.
     console.log("get /",req.params.collection,'/',req.params.id);
     let id = {};
-    id["id_"+req.params.collection] = req.params.id;
+    let id_name = boucles.definitions[req.params.collection].id;
+    id[id_name] = req.params.id;
     req.spip.select(req.params.collection,{criteres:id})
     .then((retour)=>{
         (retour.length)? res.json(
@@ -57,9 +59,9 @@ router.post('/:collection'+validRoutes.route,function(req,res){
 router.patch('/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
     //met à jour un élément    
     let query = req.body;    
-    query['criteres']={};    
-    query['criteres']['id_'+req.params.collection] = req.params.id;    
-
+    query['criteres']={}; 
+    let id_name = boucles.definitions[req.params.collection].id;
+    query['criteres'][id_name] = req.params.id;
     req.spip.update(req.params.collection,query)
     .then((retour)=>{
         console.log('retour',retour);
@@ -80,8 +82,9 @@ router.patch('/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
 router.delete('/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
     //supprime un élément
     let query = {};
-    query['criteres']={};    
-    query['criteres']['id_'+req.params.collection] = req.params.id;     
+    query['criteres']={};        
+    let id_name = boucles.definitions[req.params.collection].id;
+    query['criteres'][id_name] = req.params.id;    
 
     req.spip.delete(req.params.collection,query)
     .then((retour)=>{
