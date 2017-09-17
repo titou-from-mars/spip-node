@@ -1,5 +1,7 @@
 {
     "port":3000,
     "racine":"/spip/",
-    "caseSensitive":false
+    "caseSensitive":false,
+    "env":"development",
+    "xPoweredBy":false
 }

@@ -10,7 +10,9 @@ const express = require('express'),
     strategy = require('./app/auth/strategy.js');
     
 var app = express();
+app.set('env',serverParam.env);
 app.set('case sensitive routing', serverParam.caseSensitive);
+app.set('x-powered-by', serverParam.xPoweredBy);
 //Création du pool de connection à la base
 var db = new database(connectionParam);
 var spip = new SPIP(db.pool);
