@@ -1,4 +1,5 @@
 let mysql = require("mysql2");
+
 module.exports = {
     ping :function (){
         console.log("pong");
@@ -23,20 +24,11 @@ module.exports = {
      * @return {string} - une  portion de requête sql utilisable dans une clause WHERE
      */
      where:function (query,callback) {
-        console.log("WHERE");
-        if (query.isJointure && query.criteres) query.sql += " AND ";  
-        if (query.criteres === 1) query.sql +=  " 1 ";
-        else{
-            let first = true;        
-            for (let crit in query.criteres) {
-                (!first) ? query.sql += " AND ": first = false;
-                query.sql += " " + mysql.escapeId(crit) + " = " + mysql.escape(query.criteres[crit]);
-            }
-
-        }
-        
+        console.log("WHERE");  
+        if (query.isJointure && query.criteres) query.sql += " AND "; 
+        query.sql +=  _where(query.criteres) ;   
         callback(null,query);
-    },
+    },   
 
     groupby:function(query,callback){
         console.log("GROUP BY");
@@ -72,6 +64,17 @@ module.exports = {
         }
         callback(null,query);        
 
+    },
+
+    delier:function(query,callback){
+        if(query.liens){
+            query.sql = "";
+            for(let i =0, len = query.liens.length; i < len; i++){
+                //query.sql += mysql.format("INSERT INTO ?? SET ? ;",query.liens[i]);
+                query.sql += mysql.format("DELETE FROM  ?? WHERE ",query.liens[i][0]) + _where(query.liens[i][1]) + ";" ;
+            }
+        }
+        callback(null,query);
     },
 
     insert:function(query, callback){
@@ -117,3 +120,21 @@ module.exports = {
 
 
 }
+
+/**
+ * fonctions "privés"
+ */
+
+_where = function(criteres){
+    let sql = "";  
+    if (criteres === 1) sql +=  " 1 ";
+    else{
+        let first = true;        
+        for (let crit in criteres) {
+            (!first) ? sql += " AND ": first = false;
+            sql += " " + mysql.escapeId(crit) + " = " + mysql.escape(criteres[crit]);
+        }
+
+    }
+    return sql;
+};

@@ -107,7 +107,7 @@ router.delete('/:collection'+validRoutes.route+'/:id(\\d+)/',function(req,res){
  * @example - PATCH /article/55/ajouter/{"id_mot":[22,5],"id_auteur":2}  //ajoute les mots-clefs 22 et 5, ainsi que l'auteur 2 à l'article 55 
  * @param {string} collection - Le nom de la collection (ex : article, rubrique...)
  * @param {int} id - L'id correspondant à l'élement ciblé
- * @param {int|array} ids_mot - Le ou les id des mots clefs à ajouter à l'élement  
+ * @param {json} ids_mot - Le ou les id des mots clefs à ajouter à l'élement  
  */
 router.patch('/:collection/:id(\\d+)/ajouter/:ids',function(req,res){
     validParams.mustBeJSON(req.params.ids,res);
@@ -134,5 +134,28 @@ router.patch('/:collection/:id(\\d+)/ajouter/:ids',function(req,res){
 
 });    
 
+router.patch('/:collection/:id(\\d+)/retirer/:ids',function(req,res){
+    validParams.mustBeJSON(req.params.ids,res);
+    let query = {};
+    query['liens'] = JSON.parse(req.params.ids);    
+    query["id"] = req.params.id;
+    console.log("query:",query);
+    req.spip.dissocier(req.params.collection,query)
+    .then((retour)=>{
+        console.log("retour:",retour);
+        res.json(
+            {
+                "status":"success",
+                "data":retour,
+            }
+        )
+    })
+    .catch((e)=>res.status(500).json(
+        {
+            "status":"error",
+            "message":e.message
+        }
+    ));
+});
 
 module.exports = router;

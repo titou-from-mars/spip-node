@@ -68,10 +68,8 @@ Spip.prototype.login = function(login,pwd){
  * 
  * @example
  * // associe le mot-clef correpondant à l'id_mot 24 à l'article correspondant à l'id_article 589
- * Spip.lien("article",{liens:{id_mot:24},id:589})
+ * Spip.associer("article",{liens:{id_mot:24},id:589})
  * @example
- * //asssocie les mots-clef correspondant à l'id_mot 12 et 56 et l'auteur id_auteur 5 aux articles id_article 15 & 22
- * Spip.lien("article",{liens:{id_mot:[12,56],id_auteur:5},id:[15,22])
  * 
  * @param {string} boucle - nom de la boucle SPIP
  * @param {object} queryParam - parametres de la requête
@@ -98,6 +96,44 @@ Spip.prototype.associer = function(boucle=throwIfMissing(),{liens = throwIfMissi
 
     });
 }
+
+Spip.prototype.associer = function(boucle=throwIfMissing(),{liens = throwIfMissing(), id = throwIfMissing() }){
+    
+    return new Promise((resolve, reject) =>{        
+        pipe(
+            [
+                (callback)=>parse.init({boucle:boucle,liens:liens,id:id},callback),
+                parse.liens, 
+                format.lien,
+                this.sendQuery.bind(this)          
+            ],
+            function(err,result){                
+                if(err) reject(err);
+                else resolve(result);
+            }
+            );    
+    });
+ }
+
+ Spip.prototype.dissocier = function(boucle=throwIfMissing(),{liens = throwIfMissing(), id = throwIfMissing() }){
+    
+    return new Promise((resolve, reject) =>{        
+        pipe(
+            [
+                (callback)=>parse.init({boucle:boucle,liens:liens,id:id},callback),
+                parse.liens, 
+                format.delier,
+                this.sendQuery.bind(this)          
+            ],
+            function(err,result){                
+                if(err) reject(err);
+                else resolve(result);
+            }
+            );    
+    });
+ } 
+
+ 
 /**
  * Effectue une requête de type DELETE sur une table d'boucle SPIP. Cette requête supprime l'élément. Pour le mettre "à la poubelle",
  * il faut utiliser update pour mettre le statut à poubelle. La requête ne nettoie pas les tables de jointures.
@@ -232,6 +268,12 @@ Spip.prototype.sendQuery =  function(query,callback){
 
 }
 
+
+//pour les tests en dev
+Spip.prototype.log = function(query,callback){
+    console.log("---------- query:\n",query);
+    callback(null,query);
+}
 
 module.exports = Spip;
 
