@@ -55,11 +55,24 @@ module.exports = {
         } else if (!query.raw.balises || tools.isEmpty(query.raw.balises) || query.raw.balises == "*") { //si on a pas précisé de balise on renvoi tout.         
             //console.log("balises is empty");
             //pour l'boucle auteur on sélectionne les champs pour éviter de renvoyer les champs comme le mot de passe...
-            (query.raw.boucle == "auteur") ? query.balises = ["id_auteur", "nom", "bio", "nom_site", "url_site"]: query.balises = "*";
+            (query.raw.boucle == "auteur") ? query.balises = ["spip_auteurs.id_auteur", "spip_auteurs.nom", "spip_auteurs.bio", "spip_auteurs.nom_site", "spip_auteurs.url_site"]: query.balises = "*";
         } else { //sinon on formate les balises demandées        
            // console.log("balises is not empty");
             //query.balises = this.connection.format("??",[balises]);
-            query.balises = query.raw.balises;
+            
+            
+            //on "désambigue" les balises
+            if(Array.isArray(query.raw.balises)){
+                query.balises = [];
+                for(let i = 0, len = query.raw.balises.length; i < len ; i++) {
+                    console.log("boucle : ",query.raw.balises[i]);
+                    query.balises.push(query.boucle.table+'.'+query.raw.balises[i]);
+                }
+
+            }else{
+                query.balises = query.boucle.table+'.'+query.raw.balises;
+            }
+            
         }
         callback(null,query);
     },
