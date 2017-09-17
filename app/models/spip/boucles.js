@@ -14,11 +14,35 @@ class Boucles{
             }else{                
                 this.definitions = require(path+'boucles-dist.json');
             }
+
+            this.compil();
             
-        }else{
-            console.log("on renvoit le même object Boucles");
-            return instance;
         }
+        return instance;
+    }
+
+    compil(){
+        console.log("compil----------");
+
+        for(let boucle in this.definitions){            
+            console.log(this.definitions[boucle].jointures);
+            if(this.definitions[boucle].jointures){
+
+                let id_boucle =  this.definitions[boucle].id;
+                for(let join in this.definitions[boucle].jointures){
+                    //this.definitions[boucle]
+                    let boucle_join = this.definitions[boucle].jointures[join];                    
+                    console.log("join:"+join);
+                    if(!this.definitions[boucle_join]['jointuresInverses']) this.definitions[boucle_join]['jointuresInverses'] = {};
+                    this.definitions[boucle_join].jointuresInverses[id_boucle] = boucle;
+                }
+                
+            }
+        }
+
+        console.log(this.definitions);
+        console.log("----------end compil");
+
     }
 
 }
