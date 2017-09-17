@@ -248,6 +248,7 @@ Spip.prototype.select = function (boucle = throwIfMissing(), {balises = "*", cri
                 parse.criteres,
                 format.select,
                 format.join,
+                format.joinInverse,
                 format.where,
                 format.groupby,
                 this.sendQuery.bind(this)          

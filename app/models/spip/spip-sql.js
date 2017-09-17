@@ -25,7 +25,8 @@ module.exports = {
      */
      where:function (query,callback) {
         console.log("WHERE");  
-        if (query.isJointure && query.criteres) query.sql += " AND "; 
+        if ((query.isJointure && query.criteres) || (query.isJointureInverse && query.criteres)) query.sql += " AND ";
+        else query.sql += " WHERE ";
         query.sql +=  _where(query.criteres) ;   
         callback(null,query);
     },   
@@ -103,8 +104,27 @@ module.exports = {
                 if (i > 0) query.sql += " AND ";
                 query.sql += " L" + i + "." + query.boucle_join[i].id_name + " = " + mysql.escape(query.boucle_join[i].id_value);
             }
-        }else{
+        }
+    
+        callback(null,query);
+    
+    },
+
+    joinInverse:function (query,callback) {
+        console.log("JOIN");
+        //on construit la requête
+        if(query.isJointureInverse) {    
+            
+            for (let i = 0, len = query.boucle_join.length; i < len; i++) {
+                query.sql += " INNER JOIN " + query.boucle_join[i].table + " AS L" + i + " ON (L" + i + "."+ query.boucle.id +" = " + query.boucle.table + "." + query.boucle.id + " ) ";
+            }
+    
             query.sql += " WHERE ";
+            for (let i = 0, len = query.boucle_join.length; i < len; i++) {
+                if (i > 0) query.sql += " OR ";
+                query.sql += " L" + i + ".id_objet = " + mysql.escape(query.boucle_join[i].id_value);
+                query.sql += " AND L" + i + ".objet = '"    + query.boucle_join[i].boucle + "'";  
+            }
         }
     
         callback(null,query);

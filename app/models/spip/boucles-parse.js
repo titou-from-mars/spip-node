@@ -95,6 +95,38 @@ module.exports = {
                     }
                 }
             )
+        }else if(query.isCrit && query.boucle.jointuresInverses){
+            console.log("peut-être jointure inverse?");
+            Object.keys(query.boucle.jointuresInverses).forEach(
+                (id_join)=>{
+                    console.log("on boucle à la recherche de jointure inverse");
+                    if(query.raw.criteres.hasOwnProperty(id_join)){
+                        console.log("jointure inverse");
+                        query.isJointureInverse = true;
+                        if(!query.boucle_join) query.boucle_join = []; 
+                        //console.log(id+"!");
+                        if (Array.isArray(query.raw.criteres[id_join])) { //pour chaque critère, un élément doit correspondre dans le tableau boucle_join
+                            for (let i = 0, len = query.raw.criteres[id_join].length; i < len; i++) 
+                                query.boucle_join.push({
+                                    id_name: id_join,
+                                    id_value:query.raw.criteres[id_join][i],
+                                    table:query.boucle.table_jointures,
+                                    boucle:query.boucle.jointuresInverses[id_join]
+                                });
+                                
+                        } else {                            
+                            query.boucle_join.push({
+                                id_name: id_join,
+                                id_value:query.raw.criteres[id_join],
+                                table:query.boucle.table_jointures,
+                                boucle:query.boucle.jointuresInverses[id_join]
+                            });
+                        }
+                        delete query.raw.criteres[id_join];
+                    }
+                }
+            )
+
         }
 
         callback(null,query);
