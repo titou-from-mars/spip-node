@@ -24,7 +24,14 @@ Spip.prototype.count = function (boucle, balises, critères) {
 
 Spip.prototype.login = function(login,pwd){
     return new Promise( (resolve,reject)=>{
-        let query = "SELECT * FROM `spip_auteurs` WHERE `login`= " + mysql.escape(login)+" AND `statut` != '5poubelle';"; 
+        //let query = "SELECT * FROM `spip_auteurs` WHERE `login`= " + mysql.escape(login)+" AND `statut` != '5poubelle';"; 
+        let query = "SELECT a.id_auteur, a.bio, a.nom, a.login, a.pass, a.alea_actuel, a.email, a.statut, a.webmestre, a.pgp"; 
+        query += ",GROUP_CONCAT(CONCAT('{\"id_rubrique\":', r.id_rubrique, ',\"id_secteur\":', r.id_secteur,',\"titre\":\"',r.titre,'\"}')) rubriques ";
+        query += "FROM spip_auteurs a "; 
+        query += "LEFT JOIN spip_auteurs_liens L0 ON a.id_auteur = L0.id_auteur "; 
+        query += "LEFT JOIN spip_rubriques r ON L0.id_objet = r.id_rubrique AND L0.objet = 'rubrique' "; 
+        query += "WHERE a.login = "+mysql.escape(login);
+        query += " GROUP BY a.id_auteur ;";
         this.spipquery.query(query)
         .then((rows)=>{
             let user, sha256, hash,message;
@@ -38,6 +45,9 @@ Spip.prototype.login = function(login,pwd){
                 sha256 = createHash('sha256');
                 hash = sha256.update(user['alea_actuel']+pwd, 'utf8').digest('hex');
                 if(hash === user['pass']) logged = true;
+                delete user.pass;
+                delete user.alea_actuel;
+                if(user.rubriques) user.rubriques = JSON.parse("["+user.rubriques+"]");
             }else{
                 console.log("le login n'existe pas !".red);
             }

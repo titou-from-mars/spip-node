@@ -16,7 +16,7 @@ router.post('/login',function(req,res){
             var token = jwt.sign(payload, secretOrKey);
             res.json({
                 status: "success",
-                data:{"token": token}
+                data:{"token": token,"auteur":logintry}
             });
         } else {
             res.status(401).json({
