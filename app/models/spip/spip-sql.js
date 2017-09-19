@@ -1,4 +1,5 @@
 let mysql = require("mysql2");
+let debug = false;
 
 module.exports = {
     ping :function (){
@@ -6,7 +7,7 @@ module.exports = {
     },
 
     select:function(query,callback){
-        console.log("SELECT");
+        if(debug) console.log("SELECT");
         // console.log("query:\n",query);
         // console.log("this:",this);
          query.sql = "SELECT " + query.balises + " FROM  ??";
@@ -24,7 +25,7 @@ module.exports = {
      * @return {string} - une  portion de requête sql utilisable dans une clause WHERE
      */
      where:function (query,callback) {
-        console.log("WHERE");  
+        if(debug) console.log("WHERE");  
         if ((query.isJointure && query.criteres) || (query.isJointureInverse && query.criteres)) query.sql += " AND ";
         else query.sql += " WHERE ";
         query.sql +=  _where(query.criteres) ;   
@@ -32,20 +33,20 @@ module.exports = {
     },   
 
     groupby:function(query,callback){
-        console.log("GROUP BY");
+        if(debug) console.log("GROUP BY");
         query.sql += " GROUP BY " + query.boucle.table + "." + query.boucle.id + " LIMIT " + query.limit;
         callback(null,query);
 
     },
 
     update:function(query,callback){
-        console.log("UPDATE");
+        if(debug) console.log("UPDATE");
         query.sql = mysql.format("UPDATE ?? ", [query.boucle.table]);
         callback(null,query);
     },
     
     set:function(query,callback){
-        console.log("SET");
+        if(debug) console.log("SET");
         if(query.boucle.maj){
             if(query.set && !query.set.hasOwnProperty("maj") ) query.set['maj'] = 'NOW()';
             else if(!query.set) query.set = {maj:'NOW()'};
@@ -79,7 +80,7 @@ module.exports = {
     },
 
     insert:function(query, callback){
-        console.log("INSERT");
+        if(debug) console.log("INSERT");
         query.sql = mysql.format("INSERT INTO ?? SET ?", [query.boucle.table, query.set]);
         callback(null,query);
     },
@@ -91,7 +92,7 @@ module.exports = {
      * @return {string} - une portion de code sql correspondant à la jointure
      */
      join:function (query,callback) {
-        console.log("JOIN");
+        if(debug) console.log("JOIN");
         //on construit la requête
         if(query.isJointure) {    
             
@@ -111,7 +112,7 @@ module.exports = {
     },
 
     joinInverse:function (query,callback) {
-        console.log("JOIN");
+        if(debug) console.log("JOIN");
         //on construit la requête
         if(query.isJointureInverse) {    
             
@@ -132,7 +133,7 @@ module.exports = {
     },
 
     delete:function(query,callback){
-        console.log("DELETE");
+        if(debug) console.log("DELETE");
         query.sql = mysql.format("DELETE ?? FROM  ?? ",[query.boucle.table,query.boucle.table]) ;
         callback(null, query);
 
