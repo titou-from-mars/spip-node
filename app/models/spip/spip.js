@@ -38,7 +38,15 @@ Spip.prototype.auth = function(id_auteur){
         .then((user)=>{
             console.log("user from database",user);
             user = user[0];
-            if(user.webmestre === 'oui') user.statut = 'webmestre';
+            if(user.webmestre === 'oui') user.role = 4;
+            else{
+                switch(user.statut){
+                    case "0minirezo": user.role = 3; break;
+                    case "redacteur": user.role = 2; break;
+                    case "6forum"   : user.role = 1; break;
+                    default: user.role = 0;
+                }
+            }
             this.auteursCache[id_auteur] = user;
             return user;
     
