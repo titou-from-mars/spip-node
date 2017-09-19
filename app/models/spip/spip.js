@@ -10,11 +10,13 @@ const mysql = require('mysql2');
 const createHash = require("sha.js");
 
 
+
 function Spip(pool) {
     this.pool = pool;
     this.spipquery = new spipQuery(this.pool);
     this.champsInterdits = ["htpass", "pass", "low_sec"];
     this.meta = new spipMeta(this.spipquery);
+    this.auteursCache = [];
 }
 
 
@@ -22,19 +24,31 @@ Spip.prototype.count = function (boucle, balises, critères) {
 
 }
 
+Spip.prototype.recalcul = function(){    
+    this.auteursCache = [];
+    return this.meta.recalcul();
+}
 Spip.prototype.auth = function(id_auteur){
-    let query = "SELECT a.id_auteur, a.statut, a.webmestre FROM spip_auteurs a WHERE a.id_auteur = "+id_auteur;
-    return this.spipquery.query(query)
-    .then((user)=>{
-        console.log("user",user);
-        user = user[0];
-        if(user.webmestre === 'oui') user.statut = 'webmestre';
-        return user;
+    if(this.auteursCache[id_auteur]){
+        console.log("user from auteursCache");        
+        return Promise.resolve(this.auteursCache[id_auteur]);
+    }else{
+        let query = "SELECT a.id_auteur, a.statut, a.webmestre FROM spip_auteurs a WHERE a.id_auteur = "+id_auteur;
+        return this.spipquery.query(query)
+        .then((user)=>{
+            console.log("user from database",user);
+            user = user[0];
+            if(user.webmestre === 'oui') user.statut = 'webmestre';
+            this.auteursCache[id_auteur] = user;
+            return user;
+    
+        })
+        .catch((e)=>{
+            return e;
+        });
 
-    })
-    .catch((e)=>{
-        return e;
-    });
+    }
+    
 
 }
 

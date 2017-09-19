@@ -1,6 +1,29 @@
 const express = require('express'),
 router = express.Router();
 
+router.get('/recalcul', function (req, res){
+    req.spip.recalcul()
+    .then((retour)=>{
+        if(retour){
+            res.json(
+                {
+                    "status":"success",
+                    "data":retour
+                }
+            )
+
+        }
+        
+    })
+    .catch((e)=>{
+        es.status(404).json(
+            {
+                "status":"error",
+                "message":e.message
+            });
+    });
+});
+
 router.get('/meta/recalcul', function(req,res){
     req.spip.meta.recalcul()
     .then((retour)=>{
