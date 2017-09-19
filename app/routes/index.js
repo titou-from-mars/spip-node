@@ -17,7 +17,7 @@ router.use(require('./auth'));
 //Toutes les routes après cette ligne nécessiterons une identification
 router.use(passport.authenticate('jwt', { session: false }));
 router.use(require('./auteurs'));
-router.use(require('./admin'));
+router.use('/admin/',require('./admin'));
 router.use(require('./raccourci.js'));
 router.use(require('./publication'));
 router.use(require('./boucles'));
