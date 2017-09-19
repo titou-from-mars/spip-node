@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "test": "pm2 start ./tests/spip.js --watch",
-    "start": "pm2 start ./app.js --watch"
+    "start": "pm2 start ./server-dist.js --watch"
   },
   "keywords": [
     "SPIP",
