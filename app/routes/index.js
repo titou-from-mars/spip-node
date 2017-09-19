@@ -4,7 +4,7 @@ var express = require('express'),
 
 router.get('/',function(req,res,next){
     req.spip.meta.get('nom_site')
-    .then((retour)=>res.send('Bienvenue sur le serveur '+retour[0].valeur+'. Merci  de choisir une boucle SPIP, ex, /articles/'))
+    .then((retour)=>res.send('Bienvenue sur le serveur '+retour+'. Merci  de choisir une boucle SPIP, ex, /articles/'))
     .catch((e)=>{
         console.log("Erreur :", e);
         res.status(500).send('Une erreur est survenue :-(');
