@@ -22,6 +22,22 @@ Spip.prototype.count = function (boucle, balises, critères) {
 
 }
 
+Spip.prototype.auth = function(id_auteur){
+    let query = "SELECT a.id_auteur, a.statut, a.webmestre FROM spip_auteurs a WHERE a.id_auteur = "+id_auteur;
+    return this.spipquery.query(query)
+    .then((user)=>{
+        console.log("user",user);
+        user = user[0];
+        if(user.webmestre === 'oui') user.statut = 'webmestre';
+        return user;
+
+    })
+    .catch((e)=>{
+        return e;
+    });
+
+}
+
 Spip.prototype.login = function(login,pwd){
     return new Promise( (resolve,reject)=>{
         //let query = "SELECT * FROM `spip_auteurs` WHERE `login`= " + mysql.escape(login)+" AND `statut` != '5poubelle';"; 
