@@ -1,6 +1,6 @@
 var express = require('express'), 
     router = express.Router(),
-    passport = require("passport");
+    passport = require('passport');
 
 router.get('/',function(req,res,next){
     req.spip.meta.get('nom_site')
@@ -15,7 +15,15 @@ router.get('/',function(req,res,next){
 router.use(require('./auth'));
 
 //Toutes les routes après cette ligne nécessiterons une identification
-router.use(passport.authenticate('jwt', { session: false }));
+//router.use(passport.authenticate('jwt', { session: false }));
+// passeport decode le JWT token s'il est présent, mais il ne bloque plus l'accès. C'est auth/autorise.js qui s'en charge.
+router.all('*',function(req,res,next){    
+    passport.authenticate('jwt', function(err, user, info) {        
+        if(!user) user = {role:0};
+        next();
+    })(req, res, next);     
+});
+
 router.use(require('./auteurs'));
 router.use('/admin/',require('./admin'));
 router.use(require('./raccourci.js'));

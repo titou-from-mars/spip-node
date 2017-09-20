@@ -1,3 +1,4 @@
 {
-    "secretOrKey":"une_clef_pour_verifier_la_signature_du_token"
+    "secretOrKey":"une_clef_pour_verifier_la_signature_du_token",
+    "roleMinimum":1
 }

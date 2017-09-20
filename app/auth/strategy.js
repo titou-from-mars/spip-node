@@ -12,7 +12,7 @@ module.exports = function(spip){
         //console.log('payload received', jwt_payload);    
         spip.auth(jwt_payload.id)
         .then((user)=>{
-            console.log("user:",user);
+            console.log("user:::",user);
             (user)? next(null, user) : next(null, false);
     
         })
