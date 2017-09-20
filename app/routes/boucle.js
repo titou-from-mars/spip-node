@@ -2,14 +2,15 @@ const express = require('express'),
     router = express.Router(),   
     ValidRoutes = require('./validate/valid-routes.js'),
     validParams = require('./validate/valid-parameters.js'),
-    definitions = require('../models/spip/boucles.js').definitions;
+    definitions = require('../models/spip/boucles.js').definitions
+    roles = require('../auth/roles');
 
 const validRoutes = new ValidRoutes();
 
 console.log("routes pattern :",validRoutes.route);
 // L'expression régulière permet de ne traiter que les cas ou :id est un nombre
 // https://stackoverflow.com/questions/11258442/express-routes-parameter-conditions
-router.get('/:boucle'+validRoutes.route+'/:id(\\d+)/',function(req,res){
+router.get('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.PUBLIC),function(req,res){
     //recupère un élément d'une boucle SPIP.
     console.log("get /",req.params.boucle,'/',req.params.id);
     let id = {};
@@ -35,7 +36,7 @@ router.get('/:boucle'+validRoutes.route+'/:id(\\d+)/',function(req,res){
     
 });
 
-router.post('/:boucle'+validRoutes.route,function(req,res){
+router.post('/:boucle'+validRoutes.route,autorise(roles.ADMIN),function(req,res){
     //créé un nouvel élément        
 
     req.spip.insert(req.params.boucle,req.body)
@@ -56,7 +57,7 @@ router.post('/:boucle'+validRoutes.route,function(req,res){
 });
 
 
-router.patch('/:boucle'+validRoutes.route+'/:id(\\d+)/',function(req,res){
+router.patch('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMIN),function(req,res){
     //met à jour un élément    
     let query = req.body;    
     query['criteres']={}; 
@@ -79,7 +80,7 @@ router.patch('/:boucle'+validRoutes.route+'/:id(\\d+)/',function(req,res){
     );
 });
 
-router.delete('/:boucle'+validRoutes.route+'/:id(\\d+)/',function(req,res){
+router.delete('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.WEBMESTRE),function(req,res){
     //supprime un élément
     let query = {};
     query['criteres']={};        
@@ -111,7 +112,7 @@ router.delete('/:boucle'+validRoutes.route+'/:id(\\d+)/',function(req,res){
  * @param {int} id - L'id correspondant à l'élement ciblé
  * @param {json} ids_mot - Le ou les id des mots clefs à ajouter à l'élement  
  */
-router.patch('/:boucle/:id(\\d+)/ajouter/:ids',function(req,res){
+router.patch('/:boucle/:id(\\d+)/ajouter/:ids',autorise(roles.ADMIN),function(req,res){
     validParams.mustBeJSON(req.params.ids,res);
     let query = {};
     query['liens'] = JSON.parse(req.params.ids);    
@@ -136,7 +137,7 @@ router.patch('/:boucle/:id(\\d+)/ajouter/:ids',function(req,res){
 
 });    
 
-router.patch('/:boucle/:id(\\d+)/retirer/:ids',function(req,res){
+router.patch('/:boucle/:id(\\d+)/retirer/:ids',autorise(roles.ADMIN),function(req,res){
     validParams.mustBeJSON(req.params.ids,res);
     let query = {};
     query['liens'] = JSON.parse(req.params.ids);    

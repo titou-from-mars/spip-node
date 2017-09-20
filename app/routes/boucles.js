@@ -1,11 +1,12 @@
 const express = require('express'), 
       validate = require('./validate/valid-parameters.js'),
       ValidRoutes = require('./validate/valid-routes.js');  
-      router = express.Router();
+      router = express.Router(),
+      roles = require('../auth/roles');
 
 const validRoutes = new ValidRoutes();
 
-router.get('(/:boucle'+validRoutes.route+'){1}s/:criteres',function(req,res){
+router.get('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.PUBLIC),function(req,res){
     //recupère des éléments d'une boucle SPIP. 
     validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
     req.spip.select(req.params.boucle,JSON.parse(req.params.criteres))
@@ -26,7 +27,7 @@ router.get('(/:boucle'+validRoutes.route+'){1}s/:criteres',function(req,res){
 });
 
 
-router.patch('(/:boucle'+validRoutes.route+'){1}s/:criteres',function(req,res){
+router.patch('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.ADMIN),function(req,res){
     //met à jour des éléments
     
     validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
@@ -51,7 +52,7 @@ router.patch('(/:boucle'+validRoutes.route+'){1}s/:criteres',function(req,res){
         );
 });
 
-router.delete('(/:boucle'+validRoutes.route+'){1}s/:criteres',function(req,res){
+router.delete('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.WEBMESTRE),function(req,res){
     //supprime des éléments
     validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
     
