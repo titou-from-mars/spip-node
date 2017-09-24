@@ -33,7 +33,15 @@ Spip.prototype.auth = function(id_auteur){
         console.log("user from auteursCache");        
         return Promise.resolve(this.auteursCache[id_auteur]);
     }else{
-        let query = "SELECT a.id_auteur, a.statut, a.webmestre FROM spip_auteurs a WHERE a.id_auteur = "+id_auteur;
+        //let query = "SELECT a.id_auteur, a.statut, a.webmestre FROM spip_auteurs a WHERE a.id_auteur = "+id_auteur;
+        let query = "SELECT a.id_auteur, a.bio, a.nom, a.login, a.pass, a.alea_actuel, a.email, a.statut, a.webmestre, a.pgp"; 
+        query += ",GROUP_CONCAT(CONCAT(r.id_rubrique)) rubriques ";
+        query += "FROM spip_auteurs a "; 
+        query += "LEFT JOIN spip_auteurs_liens L0 ON a.id_auteur = L0.id_auteur "; 
+        query += "LEFT JOIN spip_rubriques r ON L0.id_objet = r.id_rubrique AND L0.objet = 'rubrique' "; 
+        query += "WHERE a.id_auteur = "+id_auteur;
+        query += " GROUP BY a.id_auteur ;";
+        console.log("query:",query);
         return this.spipquery.query(query)
         .then((user)=>{
             console.log("user from database",user);
