@@ -53,6 +53,7 @@ Spip.prototype.auth = function(id_auteur){
             }          
 
             if(user.webmestre === 'oui') user.role = 4;
+            else if(user.rubriques) user.role = 2;//admin restreint
             else{
                 switch(user.statut){
                     case "0minirezo": user.role = 3; break;
