@@ -14,8 +14,9 @@ module.exports = class SpipServer{
      * @param {string}  racine  - Le chemin où le serveur SPIP doit écouter
      */ 
     constructor(app,{racine = '/spip/',roleMinimum=1,connectionParam=throwIfMissing(),secretOrKey=throwIfMissing()}){
-        //on charge les modules express dont on a besoin
-        this.app = app;        
+        //on charge les modules express dont on a besoin        
+        this.app = app;  
+        this.app.set('secretOrKey',secretOrKey);      
         this.app.use(logger('dev'));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({extended:true}));

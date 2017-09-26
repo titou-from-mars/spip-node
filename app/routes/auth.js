@@ -1,7 +1,6 @@
 const express = require('express'), 
       jwt = require('jsonwebtoken'), 
-      router = express.Router(),
-      secretOrKey = require('../../config/security.json').secretOrKey; 
+      router = express.Router();      
 
 router.post('/login',function(req,res){
     console.log("login");
@@ -13,7 +12,7 @@ router.post('/login',function(req,res){
             var payload = {
                 id: logintry.user.id_auteur
             };
-            var token = jwt.sign(payload, secretOrKey);
+            var token = jwt.sign(payload, res.app.get('secretOrKey'));
             res.json({
                 status: "success",
                 data:{"token": token,"auteur":logintry}
