@@ -1,6 +1,6 @@
 const express = require('express'),   
       serverParam = require('./config/server.json'),
-      SpipServer = require('./app/spip-server'),    
+      SpipServer = require('./index.js'),    
       app = express();
 
 app.set('env',serverParam.env);
