@@ -3,16 +3,18 @@ const jwt = require('jsonwebtoken'),
       ExtractJwt = passportJWT.ExtractJwt,
       JwtStrategy = passportJWT.Strategy;
 
-var jwtOptions = {};
-jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt');//simule comportement 2.x.x . Il faudra peut-être adopter  ExtractJwt.fromAuthHeaderAsBearerToken() de la 3.x.x
-jwtOptions.secretOrKey = require('../../config/security.json').secretOrKey; 
+var   jwtOptions = {};
 
-module.exports = function(spip){
+module.exports = function(spip,secretOrKey){
+
+    jwtOptions.jwtFromRequest = ExtractJwt.fromAuthHeaderWithScheme('jwt');//simule comportement 2.x.x . Il faudra peut-être adopter  ExtractJwt.fromAuthHeaderAsBearerToken() de la 3.x.x
+    jwtOptions.secretOrKey = secretOrKey;
+
     return new JwtStrategy(jwtOptions, function (jwt_payload, next) {
         //console.log('payload received', jwt_payload);    
         spip.auth(jwt_payload.id)
         .then((user)=>{
-            console.log("user:::",user);
+            //console.log("user:::",user);
             (user)? next(null, user) : next(null, false);
     
         })

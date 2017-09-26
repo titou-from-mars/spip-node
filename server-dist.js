@@ -1,13 +1,19 @@
 const express = require('express'),   
       serverParam = require('./config/server.json'),
+      secuParam = require('./config/security.json'),
       SpipServer = require('./index.js'),    
       app = express();
 
 app.set('env',serverParam.env);
 app.set('case sensitive routing', serverParam.caseSensitive);
 app.set('x-powered-by', serverParam.xPoweredBy);
-
-const spip = new SpipServer(app,serverParam.racine);
+let config ={
+    racine:serverParam.racine,
+    roleMinimum:secuParam.roleMinimum,
+    connectionParam:require('./config/connection.json'),
+    secretOrKey:secuParam.secretOrKey
+}
+const spip = new SpipServer(app,config);
 
 //on ajoute une route custom qui utilisera le système d'authentifcation et de droits de spip
 spip.router.get('/coffee',autorise(roles.PUBLIC),function(req,res){

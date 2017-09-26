@@ -1,7 +1,6 @@
 const   bodyParser = require('body-parser'),
         logger = require('morgan'),
-        passport = require("passport"),
-        connectionParam = require('../config/connection.json'),
+        passport = require("passport"),        
         database = require('./database.js'),
         SPIP = require('./models/spip/spip.js'),
         spipMiddleware = require('./middlewares/inject-spip.js'),
@@ -14,18 +13,22 @@ module.exports = class SpipServer{
      * @param {express} app     - Une instance d'un serveur Express
      * @param {string}  racine  - Le chemin où le serveur SPIP doit écouter
      */ 
-    constructor(app,racine){
+    constructor(app,{racine = '/spip/',roleMinimum=1,connectionParam=throwIfMissing(),secretOrKey=throwIfMissing()}){
         //on charge les modules express dont on a besoin
         this.app = app;        
         this.app.use(logger('dev'));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({extended:true}));
+        this.app.use(function (req, res, next) {
+            req.roleMinimum = roleMinimum;
+            next();
+        });
 
         //Création du pool de connection à la base
         const db = new database(connectionParam);
         const spip = new SPIP(db.pool);
         
-        passport.use(strategy(spip));
+        passport.use(strategy(spip,secretOrKey));
         this.app.use(passport.initialize());    
         this.app.use(spipMiddleware(spip));   
         this.router = require('./routes'); 
@@ -40,4 +43,7 @@ module.exports = class SpipServer{
         });
     }
 
+}
+function throwIfMissing() {
+    throw new Error('Missing parameter');
 }
