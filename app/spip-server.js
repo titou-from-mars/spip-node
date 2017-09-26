@@ -16,19 +16,28 @@ module.exports = class SpipServer{
      */ 
     constructor(app,racine){
         //on charge les modules express dont on a besoin
-        app.use(logger('dev'));
-        app.use(bodyParser.json());
-        app.use(bodyParser.urlencoded({extended:true}));
+        this.app = app;        
+        this.app.use(logger('dev'));
+        this.app.use(bodyParser.json());
+        this.app.use(bodyParser.urlencoded({extended:true}));
 
         //Création du pool de connection à la base
         const db = new database(connectionParam);
         const spip = new SPIP(db.pool);
         
         passport.use(strategy(spip));
-        app.use(passport.initialize());    
-        app.use(spipMiddleware(spip));    
-        app.use(racine,require('./routes'));
+        this.app.use(passport.initialize());    
+        this.app.use(spipMiddleware(spip));   
+        this.router = require('./routes'); 
+        this.app.use(racine,this.router);        
+        
+    }
 
+    endConfig(){
+        //404
+        this.router.all('*', function(req, res){
+            res.status(404).send("Ressource inconnue");
+        });
     }
 
 }

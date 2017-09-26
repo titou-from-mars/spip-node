@@ -33,9 +33,9 @@ router.use(require('./boucle'));
 
 
 //404
-router.all('*', function(req, res){
+/*router.all('*', function(req, res){
     res.status(404).send("Ressource inconnue");
-});
+});*/
 
 
 
