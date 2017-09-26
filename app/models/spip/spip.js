@@ -41,7 +41,7 @@ Spip.prototype.auth = function(id_auteur){
         query += "LEFT JOIN spip_rubriques r ON L0.id_objet = r.id_rubrique AND L0.objet = 'rubrique' "; 
         query += "WHERE a.id_auteur = "+id_auteur;
         query += " GROUP BY a.id_auteur ;";
-        console.log("query:",query);
+        //console.log("query:",query);
         return this.spipquery.query(query)
         .then((user)=>{            
             user = user[0];
@@ -94,7 +94,7 @@ Spip.prototype.login = function(login,pwd){
 
             if(login_exist){
                 user = rows[0];
-                console.log("login exist".green);
+                console.log("login exist");
                 sha256 = createHash('sha256');
                 hash = sha256.update(user['alea_actuel']+pwd, 'utf8').digest('hex');
                 if(hash === user['pass']) logged = true;
@@ -102,14 +102,14 @@ Spip.prototype.login = function(login,pwd){
                 delete user.alea_actuel;
                 if(user.rubriques) user.rubriques = JSON.parse("["+user.rubriques+"]");
             }else{
-                console.log("le login n'existe pas !".red);
+                console.log("le login n'existe pas !");
             }
 
             if(logged){
-                 console.log("on retourne le user".green);
+                 console.log("on retourne le user");
                 resolve( {logged:logged,user:user});
             }else{
-                console.log("on retourne un user vide".red);
+                console.log("on retourne un user vide");
                 resolve( {logged:logged,user:{}});
             }
 
