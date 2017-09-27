@@ -1,4 +1,4 @@
-const fs = require('fs');
+
 const path = '../../../config/'; 
 
 let instance = null;
@@ -8,16 +8,11 @@ class Boucles{
     constructor(){
         if(!instance){
             console.log("new object Boucles");
-            instance = this;
-            if(fs.existsSync(path+'boucles.json')){   //on peut surcharger la définition par défaut pour ajouter ses propres boucles             
-                this.definitions = require(path+'boucles.json');
-            }else{                
-                this.definitions = require(path+'boucles-dist.json');
-            }
-
-            this.definitions = this.compil(this.definitions);
-            
+            instance = this;                          
+            this.definitionsRaw = require(path+'boucles-dist.json');
+            this.definitions = this.compil(this.definitionsRaw);            
         }
+        
         console.log("return instance");
         return instance;
     }
@@ -45,6 +40,15 @@ class Boucles{
         console.log("----------end compil");
         return definitions;
 
+    }
+
+    add(newBoucles){
+        let newDefinitions = this.compil(newBoucles);
+        for (let prop in newDefinitions) {
+            this.definitionsRaw[prop] = newDefinitions[prop];
+        }
+        this.definitions = this.compil(this.definitionsRaw);
+        return true;
     }
 
 }
