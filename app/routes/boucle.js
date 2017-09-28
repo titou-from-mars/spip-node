@@ -1,11 +1,11 @@
 const express = require('express'),
     router = express.Router(),   
-    ValidRoutes = require('./validate/valid-routes.js'),
+    validRoutes = require('./validate/valid-routes.js'),
     validParams = require('./validate/valid-parameters.js'),
     definitions = require('../models/spip/boucles.js').definitions
     roles = require('../auth/roles');
 
-const validRoutes = new ValidRoutes();
+
 
 console.log("routes pattern :",validRoutes.route);
 // L'expression régulière permet de ne traiter que les cas ou :id est un nombre

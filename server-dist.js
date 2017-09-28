@@ -11,10 +11,22 @@ let config ={
     racine:serverParam.racine,
     roleMinimum:secuParam.roleMinimum,
     connectionParam:require('./config/connection.json'),
-    secretOrKey:secuParam.secretOrKey
-}
+    secretOrKey:secuParam.secretOrKey,
+    boucles:{velo: {
+        jointures: {
+            id_mot: "mot",
+            id_auteur: "auteur",
+            id_document: "document"
+        },
+        table: "spip_velos",
+        table_jointures: null,
+        nom: "velo",
+        id: "id_velo",
+        maj: true
+        }
+    }
+};
 const spip = new SpipServer(app,config);
-
 //on ajoute une route custom qui utilisera le système d'authentifcation et de droits de spip
 spip.router.get('/coffee',autorise(roles.PUBLIC),function(req,res){
     res.status(418).send("I'm a teapot");

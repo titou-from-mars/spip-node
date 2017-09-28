@@ -2,10 +2,9 @@
 
 const express = require('express'),
 router = express.Router();
-ValidRoutes = require('./validate/valid-routes.js');
+validRoutes = require('./validate/valid-routes.js');
 validParams = require('./validate/valid-parameters.js');
 
-const validRoutes = new ValidRoutes();
 
 /**
  * récupère les élemnents liés au mot-clef dont l'id est donnés en parametres

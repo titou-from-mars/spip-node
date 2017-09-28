@@ -1,10 +1,10 @@
 const express = require('express'), 
       validate = require('./validate/valid-parameters.js'),
-      ValidRoutes = require('./validate/valid-routes.js');  
+      validRoutes = require('./validate/valid-routes.js');  
       router = express.Router(),
       roles = require('../auth/roles');
 
-const validRoutes = new ValidRoutes();
+
 
 router.get('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.PUBLIC),function(req,res){
     //recupère des éléments d'une boucle SPIP. 

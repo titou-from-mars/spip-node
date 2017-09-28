@@ -4,6 +4,7 @@ const   bodyParser = require('body-parser'),
         database = require('./database.js'),
         SPIP = require('./models/spip/spip.js'),
         spipMiddleware = require('./middlewares/inject-spip.js'),
+        ValidRoutes = require('./routes/validate/valid-routes.js'),
         strategy = require('./auth/strategy.js');
 
 module.exports = class SpipServer{
@@ -11,11 +12,18 @@ module.exports = class SpipServer{
     /**
      * Configure un serveur express pour être utilisé avec Spip-node
      * @param {express} app     - Une instance d'un serveur Express
-     * @param {string}  racine  - Le chemin où le serveur SPIP doit écouter
+     * @param {object}  config   - Un objet de configuration du serveur spip
+     * @param {string}  config.racine  - Le chemin où le serveur SPIP doit écouter
+     * @param {integer} config.[role=1] - le role minimum pour accèder à l'api
+     * @param {object}  config.connectionParam - Obligatoire, les paramètre de connection à la base de donnée SPIP
+     * @param {string}  config.secretOrKey - Obligatoire, une clef pour signer les tokens JWT
+     * @param {object}  config.boucles - Un objet définissant des boucles supplémentaires
+     * 
      */ 
-    constructor(app,{racine = '/spip/',roleMinimum=1,connectionParam=throwIfMissing(),secretOrKey=throwIfMissing()}){
+    constructor(app,{racine = '/spip/',roleMinimum=1,connectionParam=throwIfMissing(),secretOrKey=throwIfMissing(), boucles=null}){
         //on charge les modules express dont on a besoin        
         this.app = app;  
+        this.racine = racine;
         this.app.set('secretOrKey',secretOrKey);      
         this.app.use(logger('dev'));
         this.app.use(bodyParser.json());
@@ -31,11 +39,14 @@ module.exports = class SpipServer{
         
         passport.use(strategy(spip,secretOrKey));
         this.app.use(passport.initialize());    
-        this.app.use(spipMiddleware(spip));   
+        this.app.use(spipMiddleware(spip));
+        this.boucles = require('./models/spip/boucles.js');   
+        if(boucles && this.boucles.add(boucles)) ValidRoutes.generate();
+
         this.router = require('./routes'); 
-        this.app.use(racine,this.router);        
+        this.app.use(this.racine,this.router);                
         
-    }
+    }   
 
     endConfig(){
         //404
@@ -43,6 +54,7 @@ module.exports = class SpipServer{
             res.status(404).send("Ressource inconnue");
         });
     }
+
 
 }
 function throwIfMissing() {

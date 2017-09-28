@@ -42,10 +42,9 @@ class Boucles{
 
     }
 
-    add(newBoucles){
-        let newDefinitions = this.compil(newBoucles);
-        for (let prop in newDefinitions) {
-            this.definitionsRaw[prop] = newDefinitions[prop];
+    add(newBoucles){        
+        for (let prop in newBoucles) {
+            this.definitionsRaw[prop] = newBoucles[prop];
         }
         this.definitions = this.compil(this.definitionsRaw);
         return true;
