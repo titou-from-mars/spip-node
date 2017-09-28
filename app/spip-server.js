@@ -35,11 +35,11 @@ module.exports = class SpipServer{
 
         //Création du pool de connection à la base
         const db = new database(connectionParam);
-        const spip = new SPIP(db.pool);
+        this.spip = new SPIP(db.pool);
         
-        passport.use(strategy(spip,secretOrKey));
+        passport.use(strategy(this.spip,secretOrKey));
         this.app.use(passport.initialize());    
-        this.app.use(spipMiddleware(spip));
+        this.app.use(spipMiddleware(this.spip));
         this.boucles = require('./models/spip/boucles.js');   
         if(boucles && this.boucles.add(boucles)) ValidRoutes.generate();
 
@@ -53,6 +53,10 @@ module.exports = class SpipServer{
         this.router.all('*', function(req, res){
             res.status(404).send("Ressource inconnue");
         });
+    }
+
+    get model(){
+        return this.spip;
     }
 
 
