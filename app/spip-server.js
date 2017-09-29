@@ -13,6 +13,8 @@ module.exports = class SpipServer{
      * Configure un serveur express pour être utilisé avec Spip-node
      * @param {express} app     - Une instance d'un serveur Express
      * @param {object}  config   - Un objet de configuration du serveur spip
+     * @param {string}  config.hostname - Le domaine sur lequel le serveur répond
+     * @param {array}   config.ipRestriction - Un tableau avc les ip autorisée à interroger le serveur. Les ips doivent être sous la forme ::masque:ip (ex: ::ffff:195.56.139.100)
      * @param {string}  config.racine  - Le chemin où le serveur SPIP doit écouter
      * @param {integer} config.[role=1] - le role minimum pour accèder à l'api
      * @param {object}  config.connectionParam - Obligatoire, les paramètre de connection à la base de donnée SPIP
@@ -20,7 +22,7 @@ module.exports = class SpipServer{
      * @param {object}  config.boucles - Un objet définissant des boucles supplémentaires
      * 
      */ 
-    constructor(app,{hostname=null,racine = '/spip/',roleMinimum=1,connectionParam=throwIfMissing(),secretOrKey=throwIfMissing(), boucles=null}){
+    constructor(app,{hostname=null,ipRestriction=null,racine = '/spip/',roleMinimum=1,connectionParam=throwIfMissing(),secretOrKey=throwIfMissing(), boucles=null}){
         //on charge les modules express dont on a besoin        
         this.app = app;  
         this.racine = racine;
@@ -29,11 +31,14 @@ module.exports = class SpipServer{
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({extended:true}));
         this.app.use(function (req, res, next) {
+            console.log("ip",req.ip,"appelle sur domaine",req.hostname,"/",req.originalUrl);
             if(hostname && req.hostname != hostname){
                 console.log("pas le bon domaine, ",hostname,"demandé");
+                res.status(403).send();                
+
+            } else if(ipRestriction && (ipRestriction.indexOf(req.ip) == -1 )) {
                 res.status(403).send();
                 
-
             } else{
                 console.log("ok domaine:",req.hostname," autorisé sur ",hostname);
                 req.roleMinimum = roleMinimum;

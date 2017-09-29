@@ -9,6 +9,7 @@ app.set('case sensitive routing', serverParam.caseSensitive);
 app.set('x-powered-by', serverParam.xPoweredBy);
 let config ={
     hostname:serverParam.hostname,
+    ipRestriction:serverParam.ipRestriction,
     racine:serverParam.racine,
     roleMinimum:secuParam.roleMinimum,
     connectionParam:require('./config/connection.json'),
