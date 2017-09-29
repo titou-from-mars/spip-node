@@ -8,6 +8,7 @@ app.set('env',serverParam.env);
 app.set('case sensitive routing', serverParam.caseSensitive);
 app.set('x-powered-by', serverParam.xPoweredBy);
 let config ={
+    hostname:serverParam.hostname,
     racine:serverParam.racine,
     roleMinimum:secuParam.roleMinimum,
     connectionParam:require('./config/connection.json'),

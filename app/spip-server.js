@@ -20,7 +20,7 @@ module.exports = class SpipServer{
      * @param {object}  config.boucles - Un objet définissant des boucles supplémentaires
      * 
      */ 
-    constructor(app,{racine = '/spip/',roleMinimum=1,connectionParam=throwIfMissing(),secretOrKey=throwIfMissing(), boucles=null}){
+    constructor(app,{hostname=null,racine = '/spip/',roleMinimum=1,connectionParam=throwIfMissing(),secretOrKey=throwIfMissing(), boucles=null}){
         //on charge les modules express dont on a besoin        
         this.app = app;  
         this.racine = racine;
@@ -29,8 +29,17 @@ module.exports = class SpipServer{
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({extended:true}));
         this.app.use(function (req, res, next) {
-            req.roleMinimum = roleMinimum;
-            next();
+            if(hostname && req.hostname != hostname){
+                console.log("pas le bon domaine, ",hostname,"demandé");
+                res.status(403).send();
+                
+
+            } else{
+                console.log("ok domaine:",req.hostname," autorisé sur ",hostname);
+                req.roleMinimum = roleMinimum;
+                next();
+            }
+            
         });
 
         //Création du pool de connection à la base
