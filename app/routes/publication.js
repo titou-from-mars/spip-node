@@ -1,12 +1,14 @@
 const express = require('express'), 
 roles = require('../auth/roles'),
-definitions = require('../models/spip/boucles.js').definitions,
+autorise = require('../auth/autorise.js');
+rise = require('../auth/rise.js'),
+definitions = require('../models/spip/boucles.js'),
 validRoutes = require('./validate/valid-routes.js'),
 router = express.Router();
 
 
 
-router.patch('/publie/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMIN),function(req,res){
+router.patch('/publie/:boucle'+validRoutes.route+'/:id(\\d+)/',rise,autorise(roles.ADMIN),function(req,res){
     //Met le statut d'un élément SPIP à "Publié en ligne"
     statut(req,res,req.params.boucle,req.params.id,'publie');
 });
@@ -35,7 +37,7 @@ function statut(req,res,boucle,id,statut){
     let query = {};
     query['criteres']={};
     query['set'] = {statut:statut};
-    let id_name = definitions[req.params.boucle].id;
+    let id_name = definitions.getId(req.params.boucle);
     query['criteres'][id_name] = req.params.id;
     req.spip.update(boucle,query)
     .then((retour)=>{

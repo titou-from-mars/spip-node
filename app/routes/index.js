@@ -19,7 +19,12 @@ router.use(require('./auth'));
 // passeport decode le JWT token s'il est présent, mais il ne bloque plus l'accès. C'est auth/autorise.js qui s'en charge.
 router.all('*',function(req,res,next){    
     passport.authenticate('jwt', (err, user, info)=> {        
-        (!user)? req.user = {role:0} : req.user = user;
+        if(!user){
+            req.user = {role:0,bonus:0}
+        } else{
+            user.bonus = 0;
+            req.user = user;
+        } 
         next();
     })(req, res, next);     
 });
