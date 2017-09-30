@@ -50,6 +50,15 @@ class Boucles{
         return true;
     }
 
+    /**
+     * Renvoi le nom de l'id correspondant au nom de la boucle donné en paramètre
+     * @param  {string} boucle - le nom d ela boucle (article, rubrique, etc) au singulier
+     * @return {string} - le nom de l'id (id_article, id_rubrique,etc)
+     */
+    getId(boucle){
+        return this.definitions[boucle].id;
+    }
+
 }
 
 const boucles = new Boucles();
