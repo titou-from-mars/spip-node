@@ -49,7 +49,7 @@ module.exports = class SpipServer{
 
         //Création du pool de connection à la base
         const db = new database(connectionParam);
-        this.spip = new SPIP(db.pool);
+        this.spip = new SPIP(db);
         
         passport.use(strategy(this.spip,secretOrKey));
         this.app.use(passport.initialize());    
@@ -57,8 +57,19 @@ module.exports = class SpipServer{
         this.boucles = require('./models/spip/boucles.js');   
         if(boucles && this.boucles.add(boucles)) ValidRoutes.generate();
 
+        this.app.param('connection', (req, res, next,id)=> {
+            if(db.connectionList.indexOf(id)>-1){
+                db.activeConnection = id;
+                next();
+            }else{
+                res.status(404).send();
+            }
+            console.log('connection à ',id);
+           
+        });
+
         this.router = require('./routes'); 
-        this.app.use(this.racine,this.router);                
+        this.app.use(this.racine+':connection/',this.router);                
         
     }   
 
