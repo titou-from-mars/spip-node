@@ -4,15 +4,10 @@ class Database{
     
     constructor(configs){
         this.activeConnection = null;
+        this.connectionList = [];
         this.pool = [];
         for(let i = 0, l = configs.length ; i < l ; i++) 
             this.addConnection(configs[i]);
-        /*this.config = config;
-        this.config['multipleStatements'] = true;
-        this.pool = mysql.createPool(
-            this.config
-        );*/
-        //this.poolCluster.add(this.config.name, this.config);
     }
 
     addConnection({
@@ -36,6 +31,7 @@ class Database{
 
         );
         if(!this.activeConnection) this.activeConnection = name;
+        this.connectionList.push(name);
 
     }
 
@@ -43,10 +39,7 @@ class Database{
         if(!connectionName) return this.pool[this.activeConnection].getConnection();
         else return this.pool[connectionName].getConnection();    
     }
-
-    connect(handler){
-        this.pool['TEST'].getConnection(handler);
-    }
+    
 }
 
 function throwIfMissing() {
