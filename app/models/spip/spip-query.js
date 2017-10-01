@@ -14,7 +14,7 @@ class SpipQuery{
     query (sql){
         //console.log("exécute la requête :",sql);
 
-        return this.pool['TEST'].getConnection()
+        return this.pool.getConnection()
             .then((connection)=>{
                 const res = connection.query(sql);
                 connection.release();

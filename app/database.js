@@ -3,6 +3,7 @@ var mysql = require("mysql2/promise");
 class Database{
     
     constructor(configs){
+        this.activeConnection = null;
         this.pool = [];
         for(let i = 0, l = configs.length ; i < l ; i++) 
             this.addConnection(configs[i]);
@@ -34,13 +35,20 @@ class Database{
             }
 
         );
+        if(!this.activeConnection) this.activeConnection = name;
 
+    }
+
+    getConnection(connectionName=null){
+        if(!connectionName) return this.pool[this.activeConnection].getConnection();
+        else return this.pool[connectionName].getConnection();    
     }
 
     connect(handler){
         this.pool['TEST'].getConnection(handler);
     }
 }
+
 function throwIfMissing() {
     throw new Error('Missing parameter');
 }
