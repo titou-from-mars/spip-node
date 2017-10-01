@@ -12,7 +12,7 @@ let config ={
     ipRestriction:serverParam.ipRestriction,
     racine:serverParam.racine,
     roleMinimum:secuParam.roleMinimum,
-    connectionParam:require('./config/connection.json'),
+    connectionParam:require('./config/connection.json').connections,
     secretOrKey:secuParam.secretOrKey,
     boucles:{velo: {
         jointures: {
