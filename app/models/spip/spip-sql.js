@@ -10,7 +10,7 @@ module.exports = {
         if(debug) console.log("SELECT");
         // console.log("query:\n",query);
         // console.log("this:",this);
-         query.sql = "SELECT " + query.balises + " FROM  ??";
+         query.sql = "SELECT " + query.balises +(query.motsAssocies|| " ")+ " FROM  ??";
          query.sql = mysql.format(query.sql, [query.boucle.table]);
          callback(null,query);
      },
@@ -99,8 +99,14 @@ module.exports = {
             for (let i = 0, len = query.boucle_join.length; i < len; i++) {
                 query.sql += " INNER JOIN " + query.boucle_join[i].table + " AS L" + i + " ON (L" + i + ".id_objet = " + query.boucle.table + "." + query.boucle.id + " AND L" + i + ".objet = '" + query.boucle.nom + "') ";
             }
-    
-            query.sql += " WHERE ";
+        }
+        if(query.motsAssocies){
+            query.sql += " LEFT JOIN spip_mots_liens AS LM1 ON (LM1.id_objet = " + query.boucle.table + "." + query.boucle.id + " AND LM1.objet = '" + query.boucle.nom + "') ";
+            query.sql += " LEFT JOIN spip_mots ON (spip_mots.id_mot = LM1.id_mot) ";
+        }        
+        
+        if(query.isJointure) {   
+            query.sql += " WHERE ";         
             for (let i = 0, len = query.boucle_join.length; i < len; i++) {
                 if (i > 0) query.sql += " AND ";
                 query.sql += " L" + i + "." + query.boucle_join[i].id_name + " = " + mysql.escape(query.boucle_join[i].id_value);

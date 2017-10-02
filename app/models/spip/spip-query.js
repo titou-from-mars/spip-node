@@ -12,7 +12,7 @@ class SpipQuery{
      * @return {object} - le résultat de la requête sql
      */
     query (sql){
-        //console.log("exécute la requête :",sql);
+        console.log("exécute la requête :",sql);
 
         return this.pool.getConnection()
             .then((connection)=>{

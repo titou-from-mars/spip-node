@@ -60,7 +60,18 @@ module.exports = {
         } else { //sinon on formate les balises demandées        
            // console.log("balises is not empty");
             //query.balises = this.connection.format("??",[balises]);
-            
+            query.motsAssocies = null;
+            if(query.boucle.jointures && query.boucle.jointures.id_mot){
+                if(Array.isArray(query.raw.balises)){
+                    let mots = query.raw.balises.indexOf('mots');
+                    if(mots > -1) {
+                        console.log("on demande les mots-clefs associés !");
+                        query.motsAssocies = ", CONCAT('[',GROUP_CONCAT(CONCAT('{\"id_mot\":',spip_mots.id_mot,',\"titre\":\"',spip_mots.titre,'\"}')),']') AS mots ";
+
+                        query.raw.balises.splice(mots,1);
+                    }
+                }              
+            }
             
             //on "désambigue" les balises
             if(Array.isArray(query.raw.balises)){
