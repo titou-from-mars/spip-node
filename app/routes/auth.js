@@ -15,6 +15,7 @@ router.post('/login',function(req,res){
             var token = jwt.sign(payload, res.app.get('secretOrKey'));
             res.json({
                 status: "success",
+                token:token,//retrocomp avec une version antérieure
                 data:{"token": token,"auteur":logintry}
             });
         } else {
