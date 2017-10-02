@@ -1,4 +1,5 @@
 const   bodyParser = require('body-parser'),
+        cors = require('cors'),
         logger = require('morgan'),
         passport = require("passport"),        
         database = require('./database.js'),
@@ -26,7 +27,8 @@ module.exports = class SpipServer{
         //on charge les modules express dont on a besoin        
         this.app = app;  
         this.racine = racine;
-        this.app.set('secretOrKey',secretOrKey);      
+        this.app.set('secretOrKey',secretOrKey);
+        this.app.use(cors());      
         this.app.use(logger('dev'));
         this.app.use(bodyParser.json());
         this.app.use(bodyParser.urlencoded({extended:true}));
