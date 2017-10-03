@@ -160,23 +160,6 @@ Spip.prototype.associer = function(boucle=throwIfMissing(),{liens = throwIfMissi
     });
 }
 
-Spip.prototype.associer = function(boucle=throwIfMissing(),{liens = throwIfMissing(), id = throwIfMissing() }){
-    
-    return new Promise((resolve, reject) =>{        
-        pipe(
-            [
-                (callback)=>parse.init({boucle:boucle,liens:liens,id:id},callback),
-                parse.liens, 
-                format.lien,
-                this.sendQuery.bind(this)          
-            ],
-            function(err,result){                
-                if(err) reject(err);
-                else resolve(result);
-            }
-            );    
-    });
- }
 
  Spip.prototype.dissocier = function(boucle=throwIfMissing(),{liens = throwIfMissing(), id = throwIfMissing() }){
     
