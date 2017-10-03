@@ -56,10 +56,15 @@ router.post('/:boucle'+validRoutes.route,autorise(roles.ADMIN),function(req,res)
     );
 });
 
-
+/**
+ * Met à jour l'élément de la boucle :boucle, correspondant à l'id :id avec le json passé dans le body
+ * @param {string} boucle - le nom de la boucle au singulier (aka article, rubrique, etc )
+ * @param {integer} id    - l'id de l'élément
+ * @param {json} RequestBodyParameters     - un json avec les champs à mettre à jour, sous forme de paire propriétés/valeurs correspondant aux champs à mettre à jours/nouvelles valeurs
+ */
 router.patch('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMIN),function(req,res){
     //met à jour un élément    
-    let query = req.body;    
+    let query = {"set":req.body};    
     query['criteres']={}; 
     let id_name = definitions[req.params.boucle].id;
     query['criteres'][id_name] = req.params.id;
