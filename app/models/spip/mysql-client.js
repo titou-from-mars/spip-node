@@ -1,4 +1,4 @@
-class SpipQuery{
+class MysqlClient{
 
     constructor(pool){
         this.pool = pool;
@@ -35,4 +35,4 @@ class SpipQuery{
 }    
 
 
-module.exports = SpipQuery;
+module.exports = MysqlClient;

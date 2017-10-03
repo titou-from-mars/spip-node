@@ -1,11 +1,11 @@
 // pour coloriser les message des console.log()
 var pipe = require('async-waterfall');
 var tools = require('../../helpers/utils.js');
-var spipQuery = require("./spip-query.js");
-var spipMeta = require("./spip-meta.js");
+var mysqlClient = require("./mysql-client.js");
+var Meta = require("./meta.js");
 var spip_boucles = require('./boucles.js').definitions;
-var format = require("./spip-sql.js");
-var parse = require("./boucles-parse.js");
+var format = require("./sql-formatter.js");
+var parse = require("./parameters-parser.js");
 const mysql = require('mysql2');
 const createHash = require("sha.js");
 
@@ -13,9 +13,9 @@ const createHash = require("sha.js");
 
 function Spip(pool) {
     this.pool = pool;
-    this.spipquery = new spipQuery(this.pool);
+    this.spipquery = new mysqlClient(this.pool);
     this.champsInterdits = ["htpass", "pass", "low_sec"];
-    this.meta = new spipMeta(this.spipquery);
+    this.meta = new Meta(this.spipquery);
     this.auteursCache = [];
 }
 
