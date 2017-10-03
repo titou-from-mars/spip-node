@@ -8,8 +8,8 @@ const express = require('express'),
 
 router.get('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.PUBLIC),function(req,res){
     //recupère des éléments d'une boucle SPIP. 
-    validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
-    req.spip.select(req.params.boucle,JSON.parse(req.params.criteres))
+    let criteres = validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
+    req.spip.select(req.params.boucle,criteres)
     .then((retour)=>{
         //console.log('retour',retour);
         res.json(
@@ -30,9 +30,9 @@ router.get('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.PUBLIC
 router.patch('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.ADMIN),function(req,res){
     //met à jour des éléments
     
-    validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
+    
 
-    let query = JSON.parse(req.params.criteres);
+    let query = validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
     query['set'] = req.body;
     
         req.spip.update(req.params.boucle,query)
@@ -54,9 +54,9 @@ router.patch('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.ADMI
 
 router.delete('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.WEBMESTRE),function(req,res){
     //supprime des éléments
-    validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
+    let criteres = validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
     
-        req.spip.delete(req.params.boucle,JSON.parse(req.params.criteres))
+        req.spip.delete(req.params.boucle,criteres)
         .then((retour)=>{
             //console.log('retour',retour);
             res.json(
@@ -74,14 +74,11 @@ router.delete('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.WEB
 });
 
 router.patch('(/:boucle'+validRoutes.route+'){1}s/:idList/ajouter/:ids',autorise(roles.ADMIN),function(req,res){
-    console.log('boucles:',req.params.boucle,'/idList:',req.params.idList,'/ids:',req.params.ids);
-    
-    validate.mustBeJSONArray(req.params.idList);
-    validate.mustBeJSON(req.params.ids);    
+    console.log('boucles:',req.params.boucle,'/idList:',req.params.idList,'/ids:',req.params.ids);    
 
     let query = {};
-    query['liens'] = JSON.parse(req.params.ids);    
-    query["id"] = JSON.parse(req.params.idList);
+    query['liens'] = validate.mustBeJSON(req.params.ids);      
+    query["id"] = validate.mustBeJSONArray(req.params.idList);
     console.log("query:",query);
     req.spip.associer(req.params.boucle,query)
     .then((retour)=>{

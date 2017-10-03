@@ -1,7 +1,7 @@
 module.exports = {
     mustBeJSON:function(obj,res){
         try{
-            JSON.parse(obj);
+            return JSON.parse(obj);
         }catch(e){
             this.reject("un parametre n'est pas un JSON valide",res);            
         }
@@ -10,6 +10,7 @@ module.exports = {
         try{
             let json = JSON.parse(obj);
             if(!Array.isArray(json)) this.reject("un paramètre n'est pas un Array JSOn valide",res);
+            else return json;
         }catch(e){
             this.reject("un parametre n'est pas un JSON valide",res);            
         }
@@ -17,7 +18,8 @@ module.exports = {
     },
 
     mustBeInteger:function(obj,res){
-        if(!Number.isInteger(obj)) this.reject("un parametre n'est pas un entier valide",res);           
+        if(!Number.isInteger(obj)) this.reject("un parametre n'est pas un entier valide",res);
+        else return obj;          
     },
 
     reject:function(message,res){

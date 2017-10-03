@@ -118,9 +118,9 @@ router.delete('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.WEBMESTR
  * @param {json} ids_mot - Le ou les id des mots clefs à ajouter à l'élement  
  */
 router.patch('/:boucle/:id(\\d+)/ajouter/:ids',autorise(roles.ADMIN),function(req,res){
-    validParams.mustBeJSON(req.params.ids,res);
+    
     let query = {};
-    query['liens'] = JSON.parse(req.params.ids);    
+    query['liens'] = validParams.mustBeJSON(req.params.ids,res);
     query["id"] = req.params.id;
     console.log("query:",query);
     req.spip.associer(req.params.boucle,query)
@@ -143,9 +143,9 @@ router.patch('/:boucle/:id(\\d+)/ajouter/:ids',autorise(roles.ADMIN),function(re
 });    
 
 router.patch('/:boucle/:id(\\d+)/retirer/:ids',autorise(roles.ADMIN),function(req,res){
-    validParams.mustBeJSON(req.params.ids,res);
+    
     let query = {};
-    query['liens'] = JSON.parse(req.params.ids);    
+    query['liens'] = validParams.mustBeJSON(req.params.ids,res);
     query["id"] = req.params.id;
     console.log("query:",query);
     req.spip.dissocier(req.params.boucle,query)
