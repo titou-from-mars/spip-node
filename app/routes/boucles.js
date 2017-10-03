@@ -74,13 +74,31 @@ router.delete('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.WEB
 });
 
 router.patch('(/:boucle'+validRoutes.route+'){1}s/:idList/ajouter/:ids',autorise(roles.ADMIN),function(req,res){
-    console.log('boucles:',req.params.boucle,'/idList:',req.params.idList,'/id_mots:',req.params.ids);
+    console.log('boucles:',req.params.boucle,'/idList:',req.params.idList,'/ids:',req.params.ids);
     
     validate.mustBeJSONArray(req.params.idList);
-    
-    let idList = JSON.parse(req.params.idList);
+    validate.mustBeJSON(req.params.ids);    
 
-    res.json({"status":"success","data":""});   
+    let query = {};
+    query['liens'] = JSON.parse(req.params.ids);    
+    query["id"] = JSON.parse(req.params.idList);
+    console.log("query:",query);
+    req.spip.associer(req.params.boucle,query)
+    .then((retour)=>{
+        console.log("retour:",retour);
+        res.json(
+            {
+                "status":"success",
+                "data":retour,
+            }
+        )
+    })
+    .catch((e)=>res.status(500).json(
+        {
+            "status":"error",
+            "message":e.message
+        }
+    ));
 
 });
 

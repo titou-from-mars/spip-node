@@ -173,21 +173,27 @@ module.exports = {
             
              query.liens = [];
      
-             Object.keys(query.raw.liens).forEach(
+             Object.keys(query.raw.liens).forEach(                 
                  (id_join)=>{
-                     if(Array.isArray(query.raw.liens[id_join])) {
-                         for(let j = 0, len = query.raw.liens[id_join].length; j < len; j++){
-                             
-                             let insert_set = {objet:query.boucle.nom,id_objet:query.raw.id};
-                             insert_set[id_join] = query.raw.liens[id_join][j];
-                             query.liens.push([spip_boucles[query.boucle.jointures[id_join]].table_jointures,insert_set]);
-                         }
-                     }else{
-                         
-                         let insert_set = {objet:query.boucle.nom,id_objet:query.raw.id};
-                         insert_set[id_join] = query.raw.liens[id_join];
-                         query.liens.push([spip_boucles[query.boucle.jointures[id_join]].table_jointures,insert_set]);
-                     }
+                    if(Array.isArray(query.raw.id)){//Plusieurs élements sur lequel associer des objets
+                        for(let i = 0, l = query.raw.id.length ; i < l ; i++){
+                            if(Array.isArray(query.raw.liens[id_join])) {//plusieurs objet à associer
+                                for(let j = 0, len = query.raw.liens[id_join].length; j < len; j++) 
+                                   query.liens.push(_makeInsertSetForLiens(query,{id_objet:query.raw.id[i],id_join_name:id_join,id_join_value:query.raw.liens[id_join][j]}));
+                                
+                            } else query.liens.push(_makeInsertSetForLiens(query,{id_objet:query.raw.id[i],id_join_name:id_join,id_join_value:query.raw.liens[id_join]}));
+
+                        }
+
+                    }else{
+                        if(Array.isArray(query.raw.liens[id_join])) {//plusieurs objet à associer
+                            for(let j = 0, len = query.raw.liens[id_join].length; j < len; j++) 
+                               query.liens.push(_makeInsertSetForLiens(query,{id_objet:query.raw.id,id_join_name:id_join,id_join_value:query.raw.liens[id_join][j]}));
+                            
+                        } else query.liens.push(_makeInsertSetForLiens(query,{id_objet:query.raw.id,id_join_name:id_join,id_join_value:query.raw.liens[id_join]}));
+
+                    }
+                     
      
                  }
              );           
@@ -198,4 +204,10 @@ module.exports = {
     }
 
 
+}
+
+function _makeInsertSetForLiens(query,{id_objet,id_join_name,id_join_value}){
+    let insert_set = {objet:query.boucle.nom,id_objet:id_objet};
+    insert_set[id_join_name] = id_join_value;
+    return [spip_boucles[query.boucle.jointures[id_join_name]].table_jointures,insert_set];
 }
