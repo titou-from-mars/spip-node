@@ -1,9 +1,19 @@
 {
-    "name":"identifiant pour cette connection",
-    "connectionLimit":10,
-    "debug":false,
-    "host":"HOST",
-    "database":"DB_NAME",
-    "user":"USER_NAME",
-    "password":"PASSWORD"
+    "connections": [{
+        "name": "identifiant_pour_cette_connection",
+        "connectionLimit": 10,
+        "debug": false,
+        "host": "DB1-HOST",
+        "database": "DB1-NAME",
+        "user": "DB1-USER",
+        "password": "DB1-MDP"
+    },{
+        "name": "identifiant_pour_une_autre_connection",
+        "connectionLimit": 10,
+        "debug": false,
+        "host": "DB2-HOST",
+        "database": "DB2-NAME",
+        "user": "DB2-USER",
+        "password": "DB2-MDP"
+    }]
 }
