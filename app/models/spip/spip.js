@@ -230,7 +230,7 @@ Spip.prototype.delete = function(boucle = throwIfMissing() ,{criteres = throwIfM
 
 /**
  * Effectue une requête de type INSERT sur une table d'boucle SPIP
- * @param  {string} boucle - L'boucle SPIP concerné (au **singulier**)
+ * @param  {string} boucle - La boucle SPIP concerné (au **singulier**)
  * @param  {object} set - Un objet dont les couples propriété/valeurs correspondent aux données à insérer
  * 
  * @return {object} - Le résultat de la requête sql
@@ -326,9 +326,14 @@ Spip.prototype.select = function (boucle = throwIfMissing(), {balises = "*", cri
 }
 
 Spip.prototype.sendQuery =  function(query,callback){
-    this.spipquery.query(query.sql)
-    .then((result)=>callback(null,result))
-    .catch((reason)=>callback(reason,null));
+    if(!query.noQuery){
+        this.spipquery.query(query.sql)
+        .then((result)=>callback(null,result))
+        .catch((reason)=>callback(reason,null));
+    }else{
+        callback(null,query);
+    }
+    
 
 }
 

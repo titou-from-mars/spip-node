@@ -8,7 +8,8 @@ module.exports = {
                     liens = null,
                     id =null,
                     criteres = null,
-                    set = null
+                    set = null,
+                    noQuery = false //calcul le sql mais n'envoi pas la requête sql
                     },
                     callback){
         if(debug) console.log("init");
@@ -31,6 +32,7 @@ module.exports = {
             query.liens = null;    
             ///query.boucle = query.raw.boucle;        
             query.boucle = spip_boucles[query.raw.boucle];
+            query.noQuery = noQuery;
         }
         callback(error,query);
     },

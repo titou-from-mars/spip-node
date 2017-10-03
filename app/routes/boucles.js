@@ -73,4 +73,15 @@ router.delete('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.WEB
         );
 });
 
+router.patch('(/:boucle'+validRoutes.route+'){1}s/:idList/ajouter/:ids',autorise(roles.ADMIN),function(req,res){
+    console.log('boucles:',req.params.boucle,'/idList:',req.params.idList,'/id_mots:',req.params.ids);
+    
+    validate.mustBeJSONArray(req.params.idList);
+    
+    let idList = JSON.parse(req.params.idList);
+
+    res.json({"status":"success","data":""});   
+
+});
+
 module.exports = router;
