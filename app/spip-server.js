@@ -62,6 +62,7 @@ module.exports = class SpipServer{
         this.app.param('connection', (req, res, next,id)=> {
             if(db.connectionList.indexOf(id)>-1){
                 db.activeConnection = id;
+                req.activeConnection = id;
                 next();
             }else{
                 res.status(404).send();
