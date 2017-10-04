@@ -6,8 +6,17 @@ const express = require('express'),
     roles = require('../auth/roles');
 
 
-
 console.log("routes pattern :",validRoutes.route);
+/**
+ * Renvoi l'élément de la boucle :boucle correspondant à l'id :id
+ * 
+ * @example
+ * GET /article/5 //renvoi l'article correspondant à l'id_article 5
+ * @example
+ * 
+ * @param {string} boucle - le nom de la boucle au singulier (aka article, rubrique, etc )
+ * @param {integer} id    - l'id de l'élément
+ */
 // L'expression régulière permet de ne traiter que les cas ou :id est un nombre
 // https://stackoverflow.com/questions/11258442/express-routes-parameter-conditions
 router.get('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.PUBLIC),function(req,res){
@@ -36,10 +45,22 @@ router.get('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.PUBLIC),fun
     
 });
 
+/**
+ * Créé un nouvel élément de la boucle :boucle avec les valeurs du json passé dans le body
+ * 
+ * @example
+ * POST /article
+ * body:{"titre":"un nouvel article","texte","Lorem Ipsum..."}
+ * //créé un nouvel article avec le titre et le texte passé dans le json du boby
+ * @example
+ * 
+ * @param {string} boucle - le nom de la boucle au singulier (aka article, rubrique, etc )
+ * @param {json} RequestBodyParameters  - un json sous forme de paire propriétés/valeurs correspondant aux valeurs des champs de l'éléments à créer
+ */
 router.post('/:boucle'+validRoutes.route,autorise(roles.ADMIN),function(req,res){
     //créé un nouvel élément        
-
-    req.spip.insert(req.params.boucle,req.body)
+    let query = {"set":req.body};
+    req.spip.insert(req.params.boucle,query)
     .then((retour)=>{
         console.log('retour',retour);
         res.json(
@@ -58,6 +79,13 @@ router.post('/:boucle'+validRoutes.route,autorise(roles.ADMIN),function(req,res)
 
 /**
  * Met à jour l'élément de la boucle :boucle, correspondant à l'id :id avec le json passé dans le body
+ * 
+ * @example
+ * PATCH /article/5 
+ * body:{"titre":"mon nouveau titre","texte":"Lorem Ipsum..."}
+ * //Met à jour le titre et le texte de l'article correspondant id_article 5
+ * @example
+ * 
  * @param {string} boucle - le nom de la boucle au singulier (aka article, rubrique, etc )
  * @param {integer} id    - l'id de l'élément
  * @param {json} RequestBodyParameters     - un json avec les champs à mettre à jour, sous forme de paire propriétés/valeurs correspondant aux champs à mettre à jours/nouvelles valeurs
@@ -85,6 +113,16 @@ router.patch('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMIN),fu
     );
 });
 
+/**
+ * Supprime (Efface de la base), l'élément de la boucle :boucle correspondant à l'id :id
+ * 
+ * @example
+ * DELETE /article/5 //suprrime l'article correspondant à l'id_article 5
+ * @example
+ * 
+ * @param {string} boucle - Le nom de la boucle (ex : article, rubrique...)
+ * @param {int} id - L'id correspondant à l'élement ciblé
+ */
 router.delete('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.WEBMESTRE),function(req,res){
     //supprime un élément
     let query = {};
@@ -111,11 +149,14 @@ router.delete('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.WEBMESTR
 
 
 /**
- * Ajoute à l'élement d'une boucle @boucle dont l'id @id est fourni en paramètre, un ou plusieurs mots-clef correspondant aux id @ids_mot
- * @example - PATCH /article/55/ajouter/{"id_mot":[22,5],"id_auteur":2}  //ajoute les mots-clefs 22 et 5, ainsi que l'auteur 2 à l'article 55 
+ * Ajoute à l'élement d'une boucle :boucle dont l'id :id est fourni en paramètre, un ou plusieurs éléments correspondant aux id :ids
+ * @example 
+ * PATCH /article/55/ajouter/{"id_mot":[22,5],"id_auteur":2}  //ajoute les mots-clefs 22 et 5, ainsi que l'auteur 2 à l'article 55
+ * @example
+ * 
  * @param {string} boucle - Le nom de la boucle (ex : article, rubrique...)
  * @param {int} id - L'id correspondant à l'élement ciblé
- * @param {json} ids_mot - Le ou les id des mots clefs à ajouter à l'élement  
+ * @param {json} ids - Le ou les id des éléments à ajouter à l'élement cible 
  */
 router.patch('/:boucle/:id(\\d+)/ajouter/:ids',autorise(roles.ADMIN),function(req,res){
     
@@ -142,6 +183,16 @@ router.patch('/:boucle/:id(\\d+)/ajouter/:ids',autorise(roles.ADMIN),function(re
 
 });    
 
+/**
+ * Retire à l'élement d'une boucle :boucle dont l'id :id est fourni en paramètre, un ou plusieurs éléments correspondant aux id :ids
+ * @example 
+ * PATCH /article/55/retirer/{"id_mot":[22,5],"id_auteur":2}  //retire les mots-clefs 22 et 5, ainsi que l'auteur 2 de l'article 55 
+ * @example
+ * 
+ * @param {string} boucle - Le nom de la boucle (ex : article, rubrique...)
+ * @param {int} id - L'id correspondant à l'élement ciblé
+ * @param {json} ids - Le ou les id des éléments à associer à l'élement cible : {"id_mot":[2,5],"id_auteur":4}
+ */
 router.patch('/:boucle/:id(\\d+)/retirer/:ids',autorise(roles.ADMIN),function(req,res){
     
     let query = {};
