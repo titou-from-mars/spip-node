@@ -22,10 +22,11 @@ console.log("routes pattern :",validRoutes.route);
 router.get('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.PUBLIC),function(req,res){
     //recupère un élément d'une boucle SPIP.
     console.log("get /",req.params.boucle,'/',req.params.id);
-    let id = {};
+    req.requete.criteres = {};
     let id_name = definitions[req.params.boucle].id;
-    id[id_name] = req.params.id;
-    req.spip.select(req.params.boucle,{criteres:id})
+    req.requete.criteres [id_name] = req.params.id;
+    
+    req.spip.select(req.params.boucle,req.requete)
     .then((retour)=>{
         (retour.length)? res.json(
             {
@@ -58,9 +59,10 @@ router.get('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.PUBLIC),fun
  * @param {json} RequestBodyParameters  - un json sous forme de paire propriétés/valeurs correspondant aux valeurs des champs de l'éléments à créer
  */
 router.post('/:boucle'+validRoutes.route,autorise(roles.ADMIN),function(req,res){
-    //créé un nouvel élément        
-    let query = {"set":req.body};
-    req.spip.insert(req.params.boucle,query)
+    //créé un nouvel élément 
+    req.requete.set =  req.body;    
+    
+    req.spip.insert(req.params.boucle,req.requete)
     .then((retour)=>{
         console.log('retour',retour);
         res.json(
@@ -91,12 +93,12 @@ router.post('/:boucle'+validRoutes.route,autorise(roles.ADMIN),function(req,res)
  * @param {json} RequestBodyParameters     - un json avec les champs à mettre à jour, sous forme de paire propriétés/valeurs correspondant aux champs à mettre à jours/nouvelles valeurs
  */
 router.patch('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMIN),function(req,res){
-    //met à jour un élément    
-    let query = {"set":req.body};    
-    query['criteres']={}; 
+    //met à jour un élément  
+    req.requete.set = req.body; 
+    req.requete.criteres = {};      
     let id_name = definitions[req.params.boucle].id;
-    query['criteres'][id_name] = req.params.id;
-    req.spip.update(req.params.boucle,query)
+    req.requete.criteres[id_name] = req.params.id;
+    req.spip.update(req.params.boucle,req.requete)
     .then((retour)=>{
         console.log('retour',retour);
         res.json(
@@ -124,13 +126,13 @@ router.patch('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMIN),fu
  * @param {int} id - L'id correspondant à l'élement ciblé
  */
 router.delete('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.WEBMESTRE),function(req,res){
-    //supprime un élément
-    let query = {};
-    query['criteres']={};        
+    //supprime un élément    
+    
+    req.requete['criteres']={};        
     let id_name = definitions[req.params.boucle].id;
-    query['criteres'][id_name] = req.params.id;    
+    req.requete.criteres[id_name] = req.params.id;    
 
-    req.spip.delete(req.params.boucle,query)
+    req.spip.delete(req.params.boucle,req.requete)
     .then((retour)=>{
         console.log('retour',retour);
         res.json(
@@ -160,11 +162,10 @@ router.delete('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.WEBMESTR
  */
 router.patch('/:boucle/:id(\\d+)/ajouter/:ids',autorise(roles.ADMIN),function(req,res){
     
-    let query = {};
-    query['liens'] = validParams.mustBeJSON(req.params.ids,res);
-    query["id"] = req.params.id;
-    console.log("query:",query);
-    req.spip.associer(req.params.boucle,query)
+    req.requete['liens'] = validParams.mustBeJSON(req.params.ids,res);
+    req.requete["id"] = req.params.id;
+    console.log("query:",req.requete);
+    req.spip.associer(req.params.boucle,req.requete)
     .then((retour)=>{
         console.log("retour:",retour);
         res.json(
@@ -195,11 +196,10 @@ router.patch('/:boucle/:id(\\d+)/ajouter/:ids',autorise(roles.ADMIN),function(re
  */
 router.patch('/:boucle/:id(\\d+)/retirer/:ids',autorise(roles.ADMIN),function(req,res){
     
-    let query = {};
-    query['liens'] = validParams.mustBeJSON(req.params.ids,res);
-    query["id"] = req.params.id;
-    console.log("query:",query);
-    req.spip.dissocier(req.params.boucle,query)
+    req.requete['liens'] = validParams.mustBeJSON(req.params.ids,res);
+    req.requete["id"] = req.params.id;
+    console.log("query:",req.requete);
+    req.spip.dissocier(req.params.boucle,req.requete)
     .then((retour)=>{
         console.log("retour:",retour);
         res.json(
