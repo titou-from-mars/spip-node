@@ -8,7 +8,8 @@ module.exports = {
                     liens = null,
                     id =null,
                     criteres = null,
-                    set = null
+                    set = null,
+                    connection = tools.throwIfMissing()
                     },
                     callback){
         if(debug) console.log("init");
@@ -22,6 +23,7 @@ module.exports = {
             query.set = set;
             query.raw = {boucle:boucle, balises:balises,liens:liens, id:id, criteres:criteres,set:set };
             query.isJointure = false;
+            query.connection = connection;
             
             query.isCount = false;
             query.isCrit = (query.raw.criteres && !tools.isEmpty(query.raw.criteres));

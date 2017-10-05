@@ -7,14 +7,15 @@ class MysqlClient{
 
     /**
      * Effectue la requête SQL.
-     * @param {string} - Une requête sql
+     * @param {string} sql - Une requête sql
+     * @param {string} connection_name - L'identifiant de la connection dans l'array de connection de Database.js
      * 
      * @return {object} - le résultat de la requête sql
      */
-    query (sql){
+    query (sql,connection_name){
         console.log("exécute la requête :",sql);
 
-        return this.pool.getConnection()
+        return this.pool.getConnection(connection_name)
             .then((connection)=>{
                 const res = connection.query(sql);
                 connection.release();

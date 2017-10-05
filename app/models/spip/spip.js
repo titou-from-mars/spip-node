@@ -24,11 +24,11 @@ Spip.prototype.count = function (boucle, balises, critères) {
 
 }
 
-Spip.prototype.recalcul = function(){    
+Spip.prototype.recalcul = function(connection){    
     this.auteursCache = [];
-    return this.meta.recalcul();
+    return this.meta.recalcul(connection);
 }
-Spip.prototype.auth = function(id_auteur){
+Spip.prototype.auth = function(id_auteur,connection){
     if(this.auteursCache[id_auteur]){
         console.log("user from auteursCache");        
         return Promise.resolve(this.auteursCache[id_auteur]);
@@ -42,7 +42,7 @@ Spip.prototype.auth = function(id_auteur){
         query += "WHERE a.id_auteur = "+id_auteur;
         query += " GROUP BY a.id_auteur ;";
         //console.log("query:",query);
-        return this.spipquery.query(query)
+        return this.spipquery.query(query,connection)
         .then((user)=>{            
             user = user[0];
             if(user.rubriques){
@@ -75,7 +75,7 @@ Spip.prototype.auth = function(id_auteur){
 
 }
 
-Spip.prototype.login = function(login,pwd){
+Spip.prototype.login = function(login,pwd,connection){
     return new Promise( (resolve,reject)=>{
         //let query = "SELECT * FROM `spip_auteurs` WHERE `login`= " + mysql.escape(login)+" AND `statut` != '5poubelle';"; 
         let query = "SELECT a.id_auteur, a.bio, a.nom, a.login, a.pass, a.alea_actuel, a.email, a.statut, a.webmestre, a.pgp"; 
@@ -85,7 +85,7 @@ Spip.prototype.login = function(login,pwd){
         query += "LEFT JOIN spip_rubriques r ON L0.id_objet = r.id_rubrique AND L0.objet = 'rubrique' "; 
         query += "WHERE a.login = "+mysql.escape(login);
         query += " GROUP BY a.id_auteur ;";
-        this.spipquery.query(query)
+        this.spipquery.query(query,connection)
         .then((rows)=>{
             let user, sha256, hash,message;
             let logged = false;
@@ -141,12 +141,12 @@ Spip.prototype.login = function(login,pwd){
  * 
  * @return 
  */
-Spip.prototype.associer = function(boucle=throwIfMissing(),{liens = throwIfMissing(), id = throwIfMissing() }){
+Spip.prototype.associer = function(boucle=throwIfMissing(),{liens = throwIfMissing(), id = throwIfMissing(), connection = throwIfMissing() }){
 
     return new Promise((resolve, reject) =>{        
         pipe(
             [
-                (callback)=>parse.init({boucle:boucle,liens:liens,id:id},callback),
+                (callback)=>parse.init({boucle:boucle,liens:liens,id:id,connection:connection},callback),
                 parse.liens, 
                 format.lien,
                 this.sendQuery.bind(this)          
@@ -161,12 +161,12 @@ Spip.prototype.associer = function(boucle=throwIfMissing(),{liens = throwIfMissi
 }
 
 
- Spip.prototype.dissocier = function(boucle=throwIfMissing(),{liens = throwIfMissing(), id = throwIfMissing() }){
+ Spip.prototype.dissocier = function(boucle=throwIfMissing(),{liens = throwIfMissing(), id = throwIfMissing(), connection = throwIfMissing() }){
     
     return new Promise((resolve, reject) =>{        
         pipe(
             [
-                (callback)=>parse.init({boucle:boucle,liens:liens,id:id},callback),
+                (callback)=>parse.init({boucle:boucle,liens:liens,id:id,connection:connection},callback),
                 parse.liens, 
                 format.delier,
                 this.sendQuery.bind(this)          
@@ -188,12 +188,12 @@ Spip.prototype.associer = function(boucle=throwIfMissing(),{liens = throwIfMissi
  * 
  * @return {object} - Le résultat de la requête sql
  */
-Spip.prototype.delete = function(boucle = throwIfMissing() ,{criteres = throwIfMissing()}){
+Spip.prototype.delete = function(boucle = throwIfMissing() ,{criteres = throwIfMissing(), connection = throwIfMissing()}){
     
     return new Promise((resolve, reject) =>{        
         pipe(
             [
-                (callback)=>parse.init({boucle:boucle,criteres:criteres},callback),
+                (callback)=>parse.init({boucle:boucle,criteres:criteres,connection:connection},callback),
                 parse.jointures,
                 parse.criteres,
                 format.delete,
@@ -218,12 +218,12 @@ Spip.prototype.delete = function(boucle = throwIfMissing() ,{criteres = throwIfM
  * 
  * @return {object} - Le résultat de la requête sql
  */
-Spip.prototype.insert = function (boucle = throwIfMissing(), {set=throwIfMissing()}) {
+Spip.prototype.insert = function (boucle = throwIfMissing(), {set=throwIfMissing(), connection = throwIfMissing()}) {
    
     return new Promise((resolve, reject) =>{        
         pipe(
             [
-                (callback)=>parse.init({boucle:boucle, set:set},callback),            
+                (callback)=>parse.init({boucle:boucle, set:set,connection:connection},callback),            
                 format.insert,
                 this.sendQuery.bind(this)          
             ],
@@ -246,12 +246,12 @@ Spip.prototype.insert = function (boucle = throwIfMissing(), {set=throwIfMissing
  * 
  * @return {object} - Le résultat de la requête sql
  */
-Spip.prototype.update = function (boucle = throwIfMissing(), {set = null, criteres=null}={}) {
+Spip.prototype.update = function (boucle = throwIfMissing(), {set = null, criteres=null, connection = throwIfMissing()}={}) {
 
     return new Promise((resolve, reject) =>{        
         pipe(
             [
-                (callback)=>parse.init({boucle:boucle, criteres:criteres,set:set},callback),
+                (callback)=>parse.init({boucle:boucle, criteres:criteres,set:set,connection:connection},callback),
                 parse.jointures,
                 parse.criteres,
                 format.update,                
@@ -282,12 +282,12 @@ Spip.prototype.update = function (boucle = throwIfMissing(), {set = null, criter
  * 
  * @return {object} - Le résultat de la requête sql
  */
-Spip.prototype.select = function (boucle = throwIfMissing(), {balises = "*", criteres = null} = {}) {
+Spip.prototype.select = function (boucle = throwIfMissing(), {balises = "*", criteres = null, connection = throwIfMissing()} = {}) {
    
     return new Promise((resolve, reject) =>{        
         pipe(
             [
-                (callback)=>parse.init({boucle:boucle, balises:balises, criteres:criteres},callback),
+                (callback)=>parse.init({boucle:boucle, balises:balises, criteres:criteres,connection:connection},callback),
                 parse.limit,
                 parse.balises,
                 parse.jointures,
@@ -310,7 +310,7 @@ Spip.prototype.select = function (boucle = throwIfMissing(), {balises = "*", cri
 
 Spip.prototype.sendQuery =  function(query,callback){
     if(!query.noQuery){
-        this.spipquery.query(query.sql)
+        this.spipquery.query(query.sql,query.connection)
         .then((result)=>callback(null,result))
         .catch((reason)=>callback(reason,null));
     }else{
