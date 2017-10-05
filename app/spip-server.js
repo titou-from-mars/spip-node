@@ -60,9 +60,10 @@ module.exports = class SpipServer{
         if(boucles && this.boucles.add(boucles)) ValidRoutes.generate();
 
         this.app.param('connection', (req, res, next,id)=> {
+            
             if(db.connectionList.indexOf(id)>-1){
                 db.activeConnection = id;
-                req.activeConnection = id;
+                req.requete ={connection : id};
                 next();
             }else{
                 res.status(404).send();
