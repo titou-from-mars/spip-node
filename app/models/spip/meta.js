@@ -9,17 +9,24 @@ class Meta {
    */
   constructor(mysqlClient) {
     this.mysqlClient = mysqlClient;
-    this.metaCache = null;
-    this.cacheMeta();
+    this.metaCache = {};
   }
 
-  cacheMeta() {
-    return this.mysqlClient.query("SELECT `nom`,`valeur` FROM `spip_meta` WHERE 1")
+  cacheMeta(meta,value,connectionID){
+    if (!this.metaCache[connectionID]) {
+      this.metaCache[connectionID] = {};
+    }
+    this.metaCache[connectionID][meta] = value;
+    return value;
+  }
+
+  cacheAllMeta(connectionID) {
+    return this.mysqlClient.query("SELECT `nom`,`valeur` FROM `spip_meta` WHERE 1",connectionID)
       .then((meta) => {
-        this.metaCache = {};
+        this.metaCache[connectionID] = {};
         // https://stackoverflow.com/questions/4748795/how-to-find-out-if-a-string-is-a-serialized-object-array-or-just-a-string            
         for (let i = 0, len = meta.length; i < len; i++) {
-          this.metaCache[meta[i].nom] = this.decodeMeta(meta[i].valeur);
+          this.metaCache[connectionID][meta[i].nom] = this.decodeMeta(meta[i].valeur);
         }
         return true;
       })
@@ -39,9 +46,9 @@ class Meta {
     else return meta;
   }
 
-  recalcul() {
-    this.metaCache = null;
-    return this.cacheMeta()
+  recalcul(connectionID) {
+    this.metaCache[connectionID] = null;
+    return this.cacheAllMeta(connectionID)
       .then((retour) => {
         return retour;
       })
@@ -50,31 +57,31 @@ class Meta {
       });
   }
 
-  get(meta) {
-    if (this.metaCache) {
-      console.log("get meta from cache");
-      return Promise.resolve(this.metaCache[meta]);
+  get(meta,connectionID) {
+    if (this.metaCache[connectionID] && this.metaCache[connectionID][meta]) {
+      console.log("get meta from",connectionID,"cache");
+      return Promise.resolve(this.metaCache[connectionID][meta]);
     } else {
       console.log("get meta from sql");
       let sql = mysql.format("SELECT * FROM `spip_meta` WHERE `nom` = ? ", [meta]);
-      return this.mysqlClient.query(sql).then((retour) => {
-        return this.decodeMeta(retour[0].valeur);
+      return this.mysqlClient.query(sql,connectionID).then((retour) => {        
+        return this.cacheMeta(meta, this.decodeMeta(retour[0].valeur) ,connectionID);
       });
     }
 
   }
 
-  set(meta, value) {
+  set(meta, value,connectionID) {
 
   }
 
-  delete(meta) {
+  delete(meta,connectionID) {
     let sql = mysql.format("DELETE FROM `spip_meta` WHERE `nom` = ? ", [meta]);
-    return this.mysqlClient.query(sql);
+    return this.mysqlClient.query(sql,connectionID);
   }
 
-  getAll() {
-    return this.mysqlClient.query("SELECT * FROM `spip_meta` WHERE 1");
+  getAll(connectionID) {
+    return this.mysqlClient.query("SELECT * FROM `spip_meta` WHERE 1",connectionID);
   }
 }
 module.exports = Meta;
