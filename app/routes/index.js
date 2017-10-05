@@ -3,7 +3,7 @@ var express = require('express'),
     passport = require('passport');
 
 router.get('/',function(req,res,next){
-    req.spip.meta.get('nom_site')
+    req.spip.meta.get('nom_site',req.requete.connection)
     .then((retour)=>res.send('Bienvenue sur le serveur '+retour+'. Merci  de choisir une boucle SPIP, ex, /articles/'))
     .catch((e)=>{
         console.log("Erreur :", e);

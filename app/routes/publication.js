@@ -33,13 +33,12 @@ router.patch('/eval/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMI
     statut(req,res,req.params.boucle,req.params.id,'prop');
 });
 
-function statut(req,res,boucle,id,statut){
-    let query = {};
-    query['criteres']={};
-    query['set'] = {statut:statut};
+function statut(req,res,boucle,id,statut){    
+    req.requete['criteres']={};
+    req.requete['set'] = {statut:statut};
     let id_name = definitions.getId(req.params.boucle);
-    query['criteres'][id_name] = req.params.id;
-    req.spip.update(boucle,query)
+    req.requete['criteres'][id_name] = req.params.id;
+    req.spip.update(boucle,req.requete)
     .then((retour)=>{
         res.json({
             "status":"success",

@@ -5,7 +5,7 @@ const express = require('express'),
 router.post('/login',function(req,res){
     console.log("login");
     //console.trace(req);
-    req.spip.login(req.body.name,req.body.password).then((logintry)=>{
+    req.spip.login(req.body.name,req.body.password,req.requete.connection).then((logintry)=>{
         //console.log("logintry"+logintry);
         if (logintry.logged) {
             // from now on we'll identify the user by the id and the id is the only personalized value that goes into our token
