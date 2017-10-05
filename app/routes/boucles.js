@@ -8,8 +8,9 @@ const express = require('express'),
 
 router.get('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.PUBLIC),function(req,res){
     //recupère des éléments d'une boucle SPIP. 
-    let criteres = validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
-    req.spip.select(req.params.boucle,criteres)
+    let query = validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
+    query.connection = req.requete.connection;
+    req.spip.select(req.params.boucle,query)
     .then((retour)=>{
         //console.log('retour',retour);
         res.json(
@@ -34,6 +35,7 @@ router.patch('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.ADMI
 
     let query = validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
     query['set'] = req.body;
+    query['connection'] = req.requete.connection;
     
         req.spip.update(req.params.boucle,query)
         .then((retour)=>{
@@ -54,9 +56,10 @@ router.patch('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.ADMI
 
 router.delete('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.WEBMESTRE),function(req,res){
     //supprime des éléments
-    let criteres = validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
+    let query = validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
+    query['connection'] = req.requete.connection;
     
-        req.spip.delete(req.params.boucle,criteres)
+        req.spip.delete(req.params.boucle,query)
         .then((retour)=>{
             //console.log('retour',retour);
             res.json(
@@ -79,6 +82,7 @@ router.patch('(/:boucle'+validRoutes.route+'){1}s/:idList/ajouter/:ids',autorise
     let query = {};
     query['liens'] = validate.mustBeJSON(req.params.ids);      
     query["id"] = validate.mustBeJSONArray(req.params.idList);
+    query['connection'] = req.requete.connection;
     console.log("query:",query);
     req.spip.associer(req.params.boucle,query)
     .then((retour)=>{
