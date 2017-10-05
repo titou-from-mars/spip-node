@@ -3,20 +3,21 @@ const express = require('express'),
       router = express.Router();      
 
 router.post('/login',function(req,res){
-    console.log("login");
+    console.log("login, connectionID",req.requete.connection);
     //console.trace(req);
     req.spip.login(req.body.name,req.body.password,req.requete.connection).then((logintry)=>{
         //console.log("logintry"+logintry);
         if (logintry.logged) {
             // from now on we'll identify the user by the id and the id is the only personalized value that goes into our token
             var payload = {
-                id: logintry.user.id_auteur
+                id: logintry.user.id_auteur,
+                connectionID:req.requete.connection
             };
             var token = jwt.sign(payload, res.app.get('secretOrKey'));
             res.json({
                 status: "success",
                 token:token,//retrocomp avec une version antérieure
-                data:{"token": token,"auteur":logintry}
+                data:{"token": token,"connectionID":req.requete.connection,"auteur":logintry}
             });
         } else {
             res.status(401).json({

@@ -35,9 +35,8 @@ class Database{
 
     }
 
-    getConnection(connectionName=null){
-        if(!connectionName) return this.pool[this.activeConnection].getConnection();
-        else return this.pool[connectionName].getConnection();    
+    getConnection(connectionName=throwIfMissing()){        
+        return this.pool[connectionName].getConnection();    
     }
     
 }

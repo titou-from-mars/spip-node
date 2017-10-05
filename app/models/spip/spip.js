@@ -310,6 +310,7 @@ Spip.prototype.select = function (boucle = throwIfMissing(), {balises = "*", cri
 
 Spip.prototype.sendQuery =  function(query,callback){
     if(!query.noQuery){
+        console.log("query.connection",query.connection);
         this.spipquery.query(query.sql,query.connection)
         .then((result)=>callback(null,result))
         .catch((reason)=>callback(reason,null));

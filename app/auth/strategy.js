@@ -12,7 +12,7 @@ module.exports = function(spip,secretOrKey){
 
     return new JwtStrategy(jwtOptions, function (jwt_payload, next) {
         //console.log('payload received', jwt_payload);    
-        spip.auth(jwt_payload.id)
+        spip.auth(jwt_payload.id,jwt_payload.connectionID)
         .then((user)=>{
             //console.log("user:::",user);
             (user)? next(null, user) : next(null, false);

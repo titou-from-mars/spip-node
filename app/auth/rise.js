@@ -6,7 +6,7 @@ module.exports = function (req,res,next){
     if(req.user.rubriques){//admin restreint
         let criteres = {};
         criteres[definitions.getId(req.params.boucle)] = req.params.id;
-        req.spip.select(req.params.boucle,{balises:["id_rubrique","statut"],criteres:criteres})
+        req.spip.select(req.params.boucle,{balises:["id_rubrique","statut"],criteres:criteres,connection:req.requete.connection})
         .then((result)=>{
             if(req.user.rubriques && (req.user.rubriques.indexOf(result[0].id_rubrique) > -1)) {
                 console.log("bonus");
