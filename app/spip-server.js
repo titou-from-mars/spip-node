@@ -80,7 +80,10 @@ module.exports = class SpipServer{
     endConfig(){
         //404
         this.router.all('*', function(req, res){
-            res.status(404).send("Ressource inconnue");
+            res.status(404).send({
+                "status":"error",
+                "message":"la route "+req.method+" "+req.path+" est inconnue"
+            });
         });
     }
 
