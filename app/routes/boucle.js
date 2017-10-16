@@ -133,15 +133,16 @@ router.delete('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.WEBMESTR
     req.requete.criteres[id_name] = req.params.id;    
 
     req.spip.delete(req.params.boucle,req.requete)
-    .then((retour)=>{
+    .then(retour =>{
         console.log('retour',retour);
+        retour['affectedId'] = req.params.id;
         res.json(
             {
                 "status":"success",
                 "data":retour
             });
     })
-    .catch((e)=>res.status(404).json(
+    .catch(e=>res.status(404).json(
             {
                 "status":"error",
                 "message":e.message
