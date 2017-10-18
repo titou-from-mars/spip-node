@@ -34,7 +34,8 @@ module.exports = {
 
     groupby:function(query,callback){
         if(debug) console.log("GROUP BY");
-        query.sql += " GROUP BY " + query.boucle.table + "." + query.boucle.id + " LIMIT " + query.limit;
+        if( query.boucle.id ) query.sql += " GROUP BY " + query.boucle.table + "." + query.boucle.id;
+        if(query.limit) query.sql += " LIMIT " + query.limit;
         callback(null,query);
 
     },
