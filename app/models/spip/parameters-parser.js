@@ -163,11 +163,11 @@ module.exports = {
     criteres:function(query,callback){
         if(debug) console.log("criteres");
         
-        if(!query.raw.criteres && query.raw.hasOwnProperty("pluspetit")){
+        if(query.raw.criteres && query.raw.hasOwnProperty("pluspetit")){
             query.pluspetit = query.raw.pluspetit;
             delete query.raw.pluspetit;
         }
-        if(!query.raw.criteres && query.raw.hasOwnProperty("plusgrand")){
+        if(query.raw.criteres && query.raw.hasOwnProperty("plusgrand")){
             query.plusgrand = query.raw.plusgrand;
             delete query.raw.plusgrand;
         }
