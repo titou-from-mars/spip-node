@@ -10,7 +10,7 @@ module.exports = {
         if(debug) console.log("SELECT");
         // console.log("query:\n",query);
         // console.log("this:",this);
-         query.sql = "SELECT " + query.balises +(query.motsAssocies|| " ")+ " FROM  ??";
+         query.sql = "SELECT " + query.balises +(query.motsAssocies|| " ")+(query.urlsAssociees|| " ")+ " FROM  ??";
          query.sql = mysql.format(query.sql, [query.boucle.table]);
          callback(null,query);
      },
@@ -115,7 +115,11 @@ module.exports = {
         if(query.motsAssocies){
             query.sql += " LEFT JOIN spip_mots_liens AS LM1 ON (LM1.id_objet = " + query.boucle.table + "." + query.boucle.id + " AND LM1.objet = '" + query.boucle.nom + "') ";
             query.sql += " LEFT JOIN spip_mots ON (spip_mots.id_mot = LM1.id_mot) ";
-        }        
+        }
+        
+        if(query.urlsAssociees){
+            query.sql += " LEFT JOIN spip_urls ON (spip_urls.id_objet = spip_articles.id_article AND spip_urls.type = '" + query.boucle.nom + "')";
+        }
         
         if(query.isJointure) {   
             query.sql += " WHERE ";         
