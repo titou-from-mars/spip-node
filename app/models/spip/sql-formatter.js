@@ -28,7 +28,9 @@ module.exports = {
         if(debug) console.log("WHERE");  
         if ((query.isJointure && query.criteres) || (query.isJointureInverse && query.criteres)) query.sql += " AND ";
         else query.sql += " WHERE ";
-        query.sql +=  _where(query.criteres) ;   
+        query.sql +=  _where(query.criteres) ;
+        if(query.pluspetit)  _whereRange(query.pluspetit,"<");
+        if(query.plusgrand)  _whereRange(query.plusgrand,">"); 
         callback(null,query);
     },   
 
@@ -166,3 +168,11 @@ _where = function(criteres){
     }
     return sql;
 };
+
+_whereRange = function (criteres,operateur=">"){
+    let sql = "";         
+    for (let crit in criteres) {        
+        sql += " AND " + mysql.escapeId(crit) + " " + operateur + " " + mysql.escape(criteres[crit]);
+    }
+
+}
