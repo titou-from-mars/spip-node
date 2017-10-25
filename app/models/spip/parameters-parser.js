@@ -163,12 +163,12 @@ module.exports = {
     criteres:function(query,callback){
         if(debug) console.log("criteres");
         
-        if(!query.raw.criteres && query.raw.hasOwnProperty("pluspetit")){
-            query.pluspetit = query.raw.pluspetit;
+        if(query.raw.criteres && query.raw.criteres.hasOwnProperty("pluspetit")){
+            query.pluspetit = query.raw.criteres.pluspetit;
             delete query.raw.pluspetit;
         }
-        if(!query.raw.criteres && query.raw.hasOwnProperty("plusgrand")){
-            query.plusgrand = query.raw.plusgrand;
+        if(query.raw.criteres && query.raw.criteres.hasOwnProperty("plusgrand")){
+            query.plusgrand = query.raw.criteres.plusgrand;
             delete query.raw.plusgrand;
         }
         if (!query.raw.criteres || tools.isEmpty(query.raw.criteres)) query.raw.criteres = 1;
