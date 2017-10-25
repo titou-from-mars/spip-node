@@ -18,7 +18,7 @@ router.get('/recalcul', autorise(roles.ADMIN),function (req, res){
         
     })
     .catch((e)=>{
-        es.status(404).json(
+        es.status(500).json(
             {
                 "status":"error",
                 "message":e.message
@@ -41,7 +41,7 @@ router.get('/meta/recalcul',autorise(roles.ADMIN), function(req,res){
         
     })
     .catch((e)=>{
-        es.status(404).json(
+        es.status(500).json(
             {
                 "status":"error",
                 "message":e.message
@@ -66,7 +66,7 @@ router.get('/meta/:meta',autorise(roles.ADMIN),function(req,res){
         )
 
     })
-    .catch((e)=>res.status(404).json(
+    .catch((e)=>res.status(500).json(
         {
             "status":"error",
             "message":e.message

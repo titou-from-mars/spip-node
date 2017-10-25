@@ -47,7 +47,7 @@ function statut(req,res,boucle,id,statut){
 
     })
     .catch((e)=>{
-        res.status(404).json(
+        res.status(500).json(
             {
                 "status":"error",
                 "message":e.message

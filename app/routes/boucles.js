@@ -36,7 +36,7 @@ router.get('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.PUBLIC
                 "data":retour
             });
     })
-    .catch((e)=>res.status(404).json(
+    .catch((e)=>res.status(500).json(
             {
                 "status":"error",
                 "message":e.message
@@ -63,7 +63,7 @@ router.patch('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.ADMI
                     "data":retour
                 });
         })
-        .catch((e)=>res.status(404).json(
+        .catch((e)=>res.status(500).json(
                 {
                     "status":"error",
                     "message":e.message
@@ -85,7 +85,7 @@ router.delete('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.WEB
                     "data":retour
                 });
         })
-        .catch((e)=>res.status(404).json(
+        .catch((e)=>res.status(500).json(
                 {
                     "status":"error",
                     "message":e.message

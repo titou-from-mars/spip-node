@@ -38,7 +38,7 @@ router.get('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.PUBLIC),fun
                 "data":null
         });        
     })
-    .catch((e)=> res.status(404).json(
+    .catch((e)=> res.status(500).json(
         {
             "status":"error",
             "message":e.message
@@ -71,7 +71,7 @@ router.post('/:boucle'+validRoutes.route,autorise(roles.ADMIN),function(req,res)
                 "data":retour
             });
     })
-    .catch((e)=>res.status(404).json(
+    .catch((e)=>res.status(500).json(
             {
                 "status":"error",
                 "message":e.message
@@ -107,7 +107,7 @@ router.patch('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMIN),fu
                 "data":retour
             });
     })
-    .catch((e)=>res.status(404).json(
+    .catch((e)=>res.status(500).json(
             {
                 "status":"error",
                 "message":e.message
@@ -142,7 +142,7 @@ router.delete('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.WEBMESTR
                 "data":retour
             });
     })
-    .catch(e=>res.status(404).json(
+    .catch(e=>res.status(500).json(
             {
                 "status":"error",
                 "message":e.message
