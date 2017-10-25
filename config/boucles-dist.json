@@ -23,6 +23,23 @@
         "id": "id_rubrique",
         "maj": true
     },
+    "url":{
+        "table":"spip_urls",
+        "nom":"url",
+        "jointures":null,
+        "table_jointures":null,
+        "id":null,
+        "maj":false
+
+    },
+    "forum":{
+        "table":"spip_forum",
+        "nom":"forum",
+        "jointures":null,
+        "table_jointures":null,
+        "id":"id_forum",
+        "maj":true
+    },
     "mot": {
         "table": "spip_mots",
         "table_jointures": "spip_mots_liens",
