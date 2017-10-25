@@ -9,6 +9,7 @@ module.exports = {
                     id =null,
                     criteres = null,
                     set = null,
+                    order = null,
                     connection = tools.throwIfMissing()
                     },
                     callback){
@@ -33,9 +34,10 @@ module.exports = {
             query.liens = null;    
             ///query.boucle = query.raw.boucle;        
             query.boucle = spip_boucles[query.raw.boucle];
+            query.order = order;
         }
         callback(error,query);
-    },
+    },    
     limit:function(query,callback){
         if(debug) console.log("limit");
         if (query.raw.criteres && query.raw.criteres.hasOwnProperty("limit")) {

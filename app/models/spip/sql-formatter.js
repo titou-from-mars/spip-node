@@ -36,10 +36,19 @@ module.exports = {
 
     groupby:function(query,callback){
         if(debug) console.log("GROUP BY");
-        if( query.boucle.id ) query.sql += " GROUP BY " + query.boucle.table + "." + query.boucle.id;
-        if(query.limit) query.sql += " LIMIT " + query.limit;
+        if( query.boucle.id ) query.sql += " GROUP BY " + query.boucle.table + "." + query.boucle.id;        
         callback(null,query);
 
+    },
+
+    limit:function(query,callback){
+        if(query.limit) query.sql += " LIMIT " + query.limit;
+        callback(null,query);
+    },
+
+    orderby:function(query,callback){
+        if(query.order) query.sql += _orderBy(query.order);
+        callback(null,query);
     },
 
     update:function(query,callback){
@@ -175,4 +184,22 @@ _whereRange = function (criteres,operateur=">"){
         sql += " AND " + mysql.escapeId(crit) + " " + operateur + " " + mysql.escape(criteres[crit]);
     }
     return sql;
+}
+
+_orderBy = function(orders) {
+    let sql = " ORDER BY ";  
+    
+    let first = true;        
+    for (let crit in orders) {
+        (!first) ? sql += " , ": first = false;
+        sql += " " + mysql.escapeId(crit) + " " + _ordreCode(orders[crit]);
+    }
+    
+    return sql;
+}
+
+//sanitization
+_ordreCode = function (order){
+    if(order === 'DESC') return 'DESC';
+    else return 'ASC';
 }

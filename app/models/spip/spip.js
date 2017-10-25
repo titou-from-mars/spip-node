@@ -282,12 +282,12 @@ Spip.prototype.update = function (boucle = throwIfMissing(), {set = null, criter
  * 
  * @return {object} - Le résultat de la requête sql
  */
-Spip.prototype.select = function (boucle = throwIfMissing(), {balises = "*", criteres = null, connection = throwIfMissing()} = {}) {
+Spip.prototype.select = function (boucle = throwIfMissing(), {balises = "*", criteres = null, order = null , connection = throwIfMissing()} = {}) {
    
     return new Promise((resolve, reject) =>{        
         pipe(
             [
-                (callback)=>parse.init({boucle:boucle, balises:balises, criteres:criteres,connection:connection},callback),
+                (callback)=>parse.init({boucle:boucle, balises:balises, criteres:criteres,order:order, connection:connection},callback),
                 parse.limit,
                 parse.balises,
                 parse.jointures,
@@ -297,6 +297,8 @@ Spip.prototype.select = function (boucle = throwIfMissing(), {balises = "*", cri
                 format.joinInverse,
                 format.where,
                 format.groupby,
+                format.orderby,
+                format.limit,
                 this.sendQuery.bind(this)          
             ],
             function(err,result){                
