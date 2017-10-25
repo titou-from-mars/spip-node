@@ -9,7 +9,8 @@
         "table_jointures": null,
         "nom": "article",
         "id": "id_article",
-        "maj": true
+        "maj": true,
+        "url":true
     },
     "rubrique": {
         "jointures": {
@@ -21,7 +22,8 @@
         "table_jointures": null,
         "nom": "rubrique",
         "id": "id_rubrique",
-        "maj": true
+        "maj": true,
+        "url":true
     },
     "url":{
         "table":"spip_urls",
@@ -29,7 +31,8 @@
         "jointures":null,
         "table_jointures":null,
         "id":null,
-        "maj":false
+        "maj":false,
+        "url":false
 
     },
     "forum":{
@@ -38,7 +41,8 @@
         "jointures":null,
         "table_jointures":null,
         "id":"id_forum",
-        "maj":true
+        "maj":true,
+        "url":false
     },
     "mot": {
         "table": "spip_mots",
@@ -46,7 +50,8 @@
         "nom": "mot",
         "id": "id_mot",
         "jointures": null,
-        "maj": true
+        "maj": true,
+        "url":true
     },
     "groupes_mot": {
         "table": "spip_groupes_mots",
@@ -54,7 +59,8 @@
         "nom": "groupes_mot",
         "id": "id_groupe",
         "jointures": null,
-        "maj": true
+        "maj": true,
+        "url":false
     },
     "document": {
         "table": "spip_documents",
@@ -62,7 +68,8 @@
         "nom": "document",
         "id": "id_document",
         "jointures": null,
-        "maj": true
+        "maj": true,
+        "url":false
     },
     "auteur": {
         "table": "spip_auteurs",
@@ -70,7 +77,8 @@
         "nom": "auteur",
         "id": "id_auteur",
         "jointures": null,
-        "maj": true
+        "maj": true,
+        "url":true
 
     },
     "breve": {
@@ -83,6 +91,7 @@
         "table_jointures": null,
         "nom": "breve",
         "id": "id_breve",
-        "maj": true
+        "maj": true,
+        "url":true
     }
 }
