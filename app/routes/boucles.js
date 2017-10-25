@@ -5,7 +5,24 @@ const express = require('express'),
       roles = require('../auth/roles');
 
 
-
+/**
+ * Renvoi les éléments de la boucle <boucle> répondant aux critères <criteres>
+ * @example
+ * //exemple d'objet criteres pour une sélection d'article
+ * {
+ *   criteres:{
+ *      limit:50, // renvoi 50 résultats max (défaut 10)
+ *      id_rubrique:6, //les éléments sont dans la rubrique 6
+ *      id_auteur:4, // les éléments dont l'auteur correspond à l'id_auteur 4 (jointure automatique)
+ *      id_mot: 12, // les éléments auquel le mot clef 12 a été associé (jointure automatique)
+ *      plugrand:{date:"2016"}, //les élements dont la date est postérieures à 2016
+ *      pluspetit:{date:"2017",id_article:256}, //les élements dont la date est antérieure à 2017  et l'id_article plus petit que 256     
+ *   },
+ *   balises:["id_article","titre","texte"] //renvoi l'id_article, le titre et le texte des articles correspondants aux critères de sélection
+ * }
+ * @param {string} boucle - Le nom d'une boucle au pluriel
+ * @param {object} criteres - Un objet décrivant les critères de sélection - cf exemple
+ */
 router.get('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.PUBLIC),function(req,res){
     //recupère des éléments d'une boucle SPIP. 
     let query = validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
