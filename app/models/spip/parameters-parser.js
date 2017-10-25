@@ -165,11 +165,11 @@ module.exports = {
         
         if(query.raw.criteres && query.raw.criteres.hasOwnProperty("pluspetit")){
             query.pluspetit = query.raw.criteres.pluspetit;
-            delete query.raw.pluspetit;
+            delete query.raw.criteres.pluspetit;
         }
         if(query.raw.criteres && query.raw.criteres.hasOwnProperty("plusgrand")){
             query.plusgrand = query.raw.criteres.plusgrand;
-            delete query.raw.plusgrand;
+            delete query.raw.criteres.plusgrand;
         }
         if (!query.raw.criteres || tools.isEmpty(query.raw.criteres)) query.raw.criteres = 1;
         
