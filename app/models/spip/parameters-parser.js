@@ -89,7 +89,8 @@ module.exports = {
             }
             
             //on "désambigue" les balises
-            if(Array.isArray(query.raw.balises)){
+            query.balises = _desambigue(query.raw.balises,query.boucle.table);
+            /*if(Array.isArray(query.raw.balises)){
                 query.balises = [];
                 for(let i = 0, len = query.raw.balises.length; i < len ; i++) {
                     if(debug) console.log("boucle : ",query.raw.balises[i]);
@@ -98,7 +99,7 @@ module.exports = {
 
             }else{
                 query.balises = query.boucle.table+'.'+query.raw.balises;
-            }
+            }*/
             
         }
         callback(null,query);
@@ -177,14 +178,16 @@ module.exports = {
         if(debug) console.log("criteres");
         
         if(query.raw.criteres && query.raw.criteres.hasOwnProperty("pluspetit")){
-            query.pluspetit = query.raw.criteres.pluspetit;
+
+            query.pluspetit = _desambigue(query.raw.criteres.pluspetit, query.boucle.table);
             delete query.raw.criteres.pluspetit;
         }
         if(query.raw.criteres && query.raw.criteres.hasOwnProperty("plusgrand")){
-            query.plusgrand = query.raw.criteres.plusgrand;
+            query.plusgrand = _desambigue(query.raw.criteres.plusgrand,query.boucle.table);
             delete query.raw.criteres.plusgrand;
         }
         if (!query.raw.criteres || tools.isEmpty(query.raw.criteres)) query.raw.criteres = 1;
+        else query.raw.criteres = _desambigue(query.raw.criteres,query.boucle.table);
         
         query.criteres = query.raw.criteres;
         callback(null,query);
@@ -233,4 +236,23 @@ function _makeInsertSetForLiens(query,{id_objet,id_join_name,id_join_value}){
     let insert_set = {objet:query.boucle.nom,id_objet:id_objet};
     insert_set[id_join_name] = id_join_value;
     return [spip_boucles[query.boucle.jointures[id_join_name]].table_jointures,insert_set];
+}
+
+function _desambigue(cols,table){
+    //on "désambigue" les balises
+    let _cols;    
+    if(Array.isArray(cols)){
+        _cols = [];        
+        for(let i = 0, len = cols.length; i < len ; i++) {            
+            _cols.push(table+'.'+cols[i]);
+        }
+    }else if( (typeof cols === "object") && (cols !== null) ){
+        _cols = {};        
+        for(let col in cols){
+            _cols[table+'.'+col] = cols[col];
+        }
+
+    }else _cols = table+'.'+cols;          
+    
+    return _cols;
 }
