@@ -118,7 +118,7 @@ module.exports = {
         }
         
         if(query.urlsAssociees){
-            query.sql += " LEFT JOIN spip_urls ON (spip_urls.id_objet = spip_articles.id_article AND spip_urls.type = '" + query.boucle.nom + "')";
+            query.sql += " LEFT JOIN spip_urls ON (spip_urls.id_objet = " + query.boucle.table + "." + query.boucle.id + " AND spip_urls.type = '" + query.boucle.nom + "')";
         }
         
         if(query.isJointure) {   
