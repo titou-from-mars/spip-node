@@ -70,7 +70,7 @@ module.exports = {
                     let mots = query.raw.balises.indexOf('mots');
                     if(mots > -1) {
                         console.log("on demande les mots-clefs associés !");
-                        query.motsAssocies = ", CONCAT('[',GROUP_CONCAT(CONCAT('{\"id_mot\":',spip_mots.id_mot,',\"titre\":\"',spip_mots.titre,'\"}')),']') AS mots ";
+                        query.motsAssocies = ", CONCAT('[',GROUP_CONCAT(DISTINCT CONCAT('{\"id_mot\":',spip_mots.id_mot,',\"titre\":\"',spip_mots.titre,'\"}')),']') AS mots ";
 
                         query.raw.balises.splice(mots,1);
                     }
@@ -81,7 +81,7 @@ module.exports = {
                 let urls = query.raw.balises.indexOf('urls');
                 if(urls > -1){
                     console.log("on demande les urls associés !");
-                    query.urlsAssociees = ", CONCAT('[',GROUP_CONCAT(CONCAT('{\"url\":',spip_urls.url,',\"id_parent\":\"',spip_urls.id_parent,'\"}')),']') AS urls ";
+                    query.urlsAssociees = ", CONCAT('[',GROUP_CONCAT(DISTINCT CONCAT('{\"url\":',spip_urls.url,',\"id_parent\":\"',spip_urls.id_parent,'\"}')),']') AS urls ";
                     
                     query.raw.balises.splice(urls,1);
                 }
