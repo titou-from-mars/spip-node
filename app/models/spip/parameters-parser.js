@@ -81,7 +81,7 @@ module.exports = {
                 let urls = query.raw.balises.indexOf('urls');
                 if(urls > -1){
                     console.log("on demande les urls associés !");
-                    query.urlsAssociees = ", CONCAT('[',GROUP_CONCAT(DISTINCT CONCAT('{\"url\":',spip_urls.url,',\"id_parent\":\"',spip_urls.id_parent,'\"}')),']') AS urls ";
+                    query.urlsAssociees = ", CONCAT('[',GROUP_CONCAT(DISTINCT CONCAT('{\"url\":\"',spip_urls.url,'\",\"id_parent\":\"',spip_urls.id_parent,'\"}')),']') AS urls ";
                     
                     query.raw.balises.splice(urls,1);
                 }
