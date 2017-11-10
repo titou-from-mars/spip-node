@@ -3,7 +3,7 @@ const express = require('express'),
     validRoutes = require('./validate/valid-routes.js'),
     validParams = require('./validate/valid-parameters.js'),
     definitions = require('../models/spip/boucles.js').definitions
-    roles = require('../auth/roles');
+    roles = require('../models/spip/roles');
 
 
 console.log("routes pattern :",validRoutes.route);

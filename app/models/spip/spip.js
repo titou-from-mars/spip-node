@@ -8,6 +8,7 @@ var format = require("./sql-formatter.js");
 var parse = require("./parameters-parser.js");
 const mysql = require('mysql2');
 const createHash = require("sha.js");
+const roles = require('./roles');
 
 
 
@@ -52,14 +53,14 @@ Spip.prototype.auth = function(id_auteur,connection){
                 });   
             }          
 
-            if(user.webmestre === 'oui') user.role = 4;
-            else if(user.rubriques) user.role = 2;//admin restreint
+            if(user.webmestre === 'oui') user.role = roles.WEBMESTRE;
+            else if(user.rubriques) user.role = roles.ADMIN_RESTREINT;//admin restreint
             else{
                 switch(user.statut){
-                    case "0minirezo": user.role = 3; break;
-                    case "redacteur": user.role = 2; break;
-                    case "6forum"   : user.role = 1; break;
-                    default: user.role = 0;
+                    case "0minirezo": user.role = roles.ADMIN; break;
+                    case "redacteur": user.role = roles.REDACTEUR; break;
+                    case "6forum"   : user.role = roles.VISITEUR; break;
+                    default: user.role = roles.PUBLIC;
                 }
             }
             this.auteursCache[id_auteur] = user;

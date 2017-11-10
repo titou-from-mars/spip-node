@@ -2,7 +2,7 @@ const express = require('express'),
       validate = require('./validate/valid-parameters.js'),
       validRoutes = require('./validate/valid-routes.js');  
       router = express.Router(),
-      roles = require('../auth/roles');
+      roles = require('../models/spip/roles');
 
 
 /**

@@ -1,9 +1,9 @@
 const express = require('express'),
 router = express.Router();
 autorise = require('../auth/autorise.js');
-roles = require('../auth/roles.js');
+roles = require('../models/spip/roles');
 
-router.get('/recalcul', autorise(roles.ADMIN),function (req, res){
+router.get('/recalcul', autorise(roles.ADMIN_RESTREINT),function (req, res){
     req.spip.recalcul(req.requete.connection)
     .then((retour)=>{
         if(retour){
@@ -26,7 +26,7 @@ router.get('/recalcul', autorise(roles.ADMIN),function (req, res){
     });
 });
 
-router.get('/meta/recalcul',autorise(roles.ADMIN), function(req,res){
+router.get('/meta/recalcul',autorise(roles.ADMIN_RESTREINT), function(req,res){
     req.spip.meta.recalcul(req.requete.connection)
     .then((retour)=>{
         if(retour){
@@ -48,7 +48,7 @@ router.get('/meta/recalcul',autorise(roles.ADMIN), function(req,res){
             });
     });
 });
-router.get('/meta/:meta',autorise(roles.ADMIN),function(req,res){
+router.get('/meta/:meta',autorise(roles.ADMIN_RESTREINT),function(req,res){
     req.spip.meta.get(req.params.meta,req.requete.connection)
     .then((retour)=>{
         console.log("retour:",retour);

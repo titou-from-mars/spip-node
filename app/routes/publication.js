@@ -1,5 +1,5 @@
 const express = require('express'), 
-roles = require('../auth/roles'),
+roles = require('../models/spip/roles'),
 autorise = require('../auth/autorise.js');
 rise = require('../auth/rise.js'),
 definitions = require('../models/spip/boucles.js'),
