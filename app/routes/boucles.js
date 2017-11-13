@@ -19,6 +19,7 @@ const express = require('express'),
  *      pluspetit:{date:"2017",id_article:256}, //les élements dont la date est antérieure à 2017  et l'id_article plus petit que 256     
  *   },
  *   balises:["id_article","titre","texte"] //renvoi l'id_article, le titre et le texte des articles correspondants aux critères de sélection
+ *   order:{date:"DESC"} //Ordonne les articles du plus récent au plus ancien
  * }
  * @param {string} boucle - Le nom d'une boucle au pluriel
  * @param {object} criteres - Un objet décrivant les critères de sélection - cf exemple
