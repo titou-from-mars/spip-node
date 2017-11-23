@@ -59,6 +59,7 @@ module.exports = class SpipServer{
         this.boucles = require('./models/spip/boucles.js');   
         if(boucles && this.boucles.add(boucles)) ValidRoutes.generate();
 
+        //créé une propriété req.requete.connection qui sera accessible dans ttes les routes
         this.app.param('connection', (req, res, next,id)=> {
             
             if(db.connectionList.indexOf(id)>-1){
