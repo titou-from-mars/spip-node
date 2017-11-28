@@ -58,7 +58,7 @@ router.get('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.PUBLIC),fun
  * @param {string} boucle - le nom de la boucle au singulier (aka article, rubrique, etc )
  * @param {json} RequestBodyParameters  - un json sous forme de paire propriétés/valeurs correspondant aux valeurs des champs de l'éléments à créer
  */
-router.post('/:boucle'+validRoutes.route,autorise(roles.ADMIN),function(req,res){
+router.post('/:boucle'+validRoutes.route,autorise(roles.ADMIN_RESTREINT),function(req,res){
     //créé un nouvel élément 
     req.requete.set =  req.body;    
     
@@ -92,7 +92,7 @@ router.post('/:boucle'+validRoutes.route,autorise(roles.ADMIN),function(req,res)
  * @param {integer} id    - l'id de l'élément
  * @param {json} RequestBodyParameters     - un json avec les champs à mettre à jour, sous forme de paire propriétés/valeurs correspondant aux champs à mettre à jours/nouvelles valeurs
  */
-router.patch('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMIN),function(req,res){
+router.patch('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMIN_RESTREINT),function(req,res){
     //met à jour un élément  
     req.requete.set = req.body; 
     req.requete.criteres = {};      

@@ -8,7 +8,7 @@ router = express.Router();
 
 
 
-router.patch('/publie/:boucle'+validRoutes.route+'/:id(\\d+)/',rise,autorise(roles.ADMIN),function(req,res){
+router.patch('/publie/:boucle'+validRoutes.route+'/:id(\\d+)/',rise,autorise(roles.ADMIN_RESTREINT),function(req,res){
     //Met le statut d'un élément SPIP à "Publié en ligne"
     statut(req,res,req.params.boucle,req.params.id,'publie');
 });
@@ -23,12 +23,12 @@ router.patch('/poubelle/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.
     statut(req,res,req.params.boucle,req.params.id,'poubelle');
 });
 
-router.patch('/redac/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMIN),function(req,res){
+router.patch('/redac/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMIN_RESTREINT),function(req,res){
     //Met le statut d'un élément SPIP à "en cours de rédaction"
     statut(req,res,req.params.boucle,req.params.id,'prepa');
 });
 
-router.patch('/eval/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMIN),function(req,res){
+router.patch('/eval/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMIN_RESTREINT),function(req,res){
     //Met le statut d'un élément SPIP à "proposé à l'évaluation"
     statut(req,res,req.params.boucle,req.params.id,'prop');
 });
