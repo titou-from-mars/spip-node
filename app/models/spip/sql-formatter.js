@@ -17,9 +17,11 @@ module.exports = {
 
      selectCount:function(query,callback){
         if(debug) console.log("SELECT COUNT");
+        let col = "*";
+        if(!Array.isArray(query.balises)) col =  query.balises;
         //query.sql = "SELECT " + query.balises +(query.motsAssocies|| " ")+(query.urlsAssociees|| " ")+ " FROM  ??";
-        query.sql = "SELECT COUNT(*) FROM  ??";
-        query.sql = mysql.format(query.sql, [query.boucle.table]);
+        query.sql = "SELECT COUNT(?) FROM  ??";
+        query.sql = mysql.format(query.sql, [col,query.boucle.table]);
         callback(null,query);
 
      },
