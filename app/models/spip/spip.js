@@ -21,10 +21,6 @@ function Spip(pool) {
 }
 
 
-Spip.prototype.count = function (boucle, balises, critères) {
-
-}
-
 Spip.prototype.recalcul = function(connection){    
     this.auteursCache = [];
     return this.meta.recalcul(connection);
@@ -310,6 +306,34 @@ Spip.prototype.select = function (boucle = throwIfMissing(), {balises = "*", cri
 
     });
 }
+
+Spip.prototype.count = function (boucle = throwIfMissing(), {balises = "*", criteres = null, order = null , connection = throwIfMissing()} = {}) {
+    
+     return new Promise((resolve, reject) =>{        
+         pipe(
+             [
+                 (callback)=>parse.init({boucle:boucle, balises:balises, criteres:criteres,order:order, connection:connection},callback),
+                 parse.limit,
+                 parse.balises,
+                 parse.jointures,
+                 parse.criteres,
+                 format.selectCount,
+                 format.join,
+                 format.joinInverse,
+                 format.where,
+                 //format.groupby,
+                 //format.orderby,
+                 //format.limit,
+                 this.sendQuery.bind(this)          
+             ],
+             function(err,result){                
+                 if(err) reject(err);
+                 else resolve(result);
+             }
+         );
+ 
+     });
+ }
 
 Spip.prototype.sendQuery =  function(query,callback){
     if(!query.noQuery){

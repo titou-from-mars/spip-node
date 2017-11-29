@@ -45,6 +45,29 @@ router.get('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.PUBLIC
     );
 });
 
+router.get('/count(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.PUBLIC),function(req,res){
+    //recupère des éléments d'une boucle SPIP. 
+    let query = validate.mustBeJSON(req.params.criteres,res);//si non valide renvoi une erreur 400
+    query.connection = req.requete.connection;
+    req.spip.count(req.params.boucle,query)
+    .then((retour)=>{
+        //console.log('retour',retour);
+        res.json(
+            {
+                "status":"success",
+                "data":retour
+            });
+    })
+    .catch((e)=>res.status(500).json(
+            {
+                "status":"error",
+                "message":e.message
+            })
+    );
+});
+
+
+
 
 router.patch('(/:boucle'+validRoutes.route+'){1}s/:criteres',autorise(roles.ADMIN),function(req,res){
     //met à jour des éléments
