@@ -65,3 +65,4 @@ config/connection.json
 config/security\.json
 tests/test-spip-api.js
 /phploy.ini
+.vscode
