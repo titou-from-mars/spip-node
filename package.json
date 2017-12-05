@@ -20,6 +20,8 @@
     "body-parser": "^1.18.0",
     "cors": "^2.8.4",
     "express": "^4.15.4",
+    "fs": "0.0.1-security",
+    "https": "^1.0.0",
     "jsonwebtoken": "^8.0.1",
     "morgan": "^1.8.2",
     "mysql2": "^1.4.2",
