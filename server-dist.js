@@ -1,7 +1,7 @@
-const express = require('express'),   
+const express = require('express'),
       serverParam = require('./config/server.json'),
       secuParam = require('./config/security.json'),
-      SpipServer = require('./index.js'),    
+      SpipServer = require('./index.js'),
       app = express();
 
 app.set('env',serverParam.env);
@@ -36,6 +36,6 @@ spip.router.get('/coffee',autorise(roles.PUBLIC),function(req,res){
 //on a fini d'ajouter nos routes custom, donc on finalise la config des routes spip (aka, ts autre appel de route passe en 404)
 spip.endConfig();
 
-app.listen(serverParam.port,()=>{   
-    console.log('Serveur écoute sur le port '+serverParam.port);    
+app.listen(serverParam.port,()=>{
+    console.log('Serveur écoute sur le port '+serverParam.port);
 });
