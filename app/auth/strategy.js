@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken'),    
+const jwt = require('jsonwebtoken'),
       passportJWT = require("passport-jwt"),
       ExtractJwt = passportJWT.ExtractJwt,
       JwtStrategy = passportJWT.Strategy;
@@ -11,18 +11,17 @@ module.exports = function(spip,secretOrKey){
     jwtOptions.secretOrKey = secretOrKey;
 
     return new JwtStrategy(jwtOptions, function (jwt_payload, next) {
-        //console.log('payload received', jwt_payload);    
+        //console.log('payload received', jwt_payload);
         spip.auth(jwt_payload.id,jwt_payload.connectionID)
         .then((user)=>{
             //console.log("user:::",user);
             (user)? next(null, user) : next(null, false);
-    
+
         })
         .catch((e)=>{
             console.log("Erreur dans la stratégie JWT",e);
             next(e, false);
-        });    
-    
-    });
+        });
 
+    });
 }

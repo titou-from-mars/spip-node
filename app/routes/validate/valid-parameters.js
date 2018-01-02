@@ -3,7 +3,7 @@ module.exports = {
         try{
             return JSON.parse(obj);
         }catch(e){
-            this.reject("un parametre n'est pas un JSON valide",res);            
+            this.reject("un parametre n'est pas un JSON valide",res);
         }
     },
     mustBeJSONArray:function(obj,res){
@@ -12,14 +12,14 @@ module.exports = {
             if(!Array.isArray(json)) this.reject("un paramètre n'est pas un Array JSOn valide",res);
             else return json;
         }catch(e){
-            this.reject("un parametre n'est pas un JSON valide",res);            
+            this.reject("un parametre n'est pas un JSON valide",res);
         }
 
     },
 
     mustBeInteger:function(obj,res){
         if(!Number.isInteger(obj)) this.reject("un parametre n'est pas un entier valide",res);
-        else return obj;          
+        else return obj;
     },
 
     reject:function(message,res){
@@ -28,5 +28,4 @@ module.exports = {
             "message":message
         });
     }
-
 }

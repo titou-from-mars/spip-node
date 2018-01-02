@@ -5,7 +5,7 @@ module.exports = function(requiredRole) {
         else res.status(403).json({
             status:"fail",
             data:{ "reason":"Vous n'avez pas les droits nécessaires pour effectuer cette action"}
-        });        
+        });
 
     }
 };

@@ -9,7 +9,7 @@ validParams = require('./validate/valid-parameters.js');
 /**
  * récupère les élemnents liés au mot-clef dont l'id est donnés en parametres
  */
-router.get('(/:boucle'+validRoutes.route+'){1}s/mot/:id_mot(\\d+)/',function(req,res){     
+router.get('(/:boucle'+validRoutes.route+'){1}s/mot/:id_mot(\\d+)/',function(req,res){
     res.redirect('/'+req.params.boucle+'s/{"criteres":{"id_mot":'+req.params.id_mot+'}}');
 });
 
@@ -27,7 +27,7 @@ router.get('/mots/:boucle'+validRoutes.route+'/:id(\\d+)/',function(req,res){
 /**
  * récupère les élemnents liés au mot-clef à l'auteur dont l'id est donnés en parametres
  */
-router.get('(/:boucle'+validRoutes.route+'){1}s/auteur/:id_auteur(\\d+)/',function(req,res){     
+router.get('(/:boucle'+validRoutes.route+'){1}s/auteur/:id_auteur(\\d+)/',function(req,res){
     res.redirect('/'+req.params.boucle+'s/{"criteres":{"id_auteur":'+req.params.id_auteur+'}}');
 });
 

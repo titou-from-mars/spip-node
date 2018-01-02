@@ -17,6 +17,4 @@ module.exports = {
     throwIfMissing:function() {
         throw new Error('Missing parameter');
     }
-
-   
-  };
+};

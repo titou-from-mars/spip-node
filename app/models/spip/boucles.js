@@ -1,5 +1,5 @@
 
-const path = '../../../config/'; 
+const path = '../../../config/';
 
 let instance = null;
 
@@ -8,11 +8,11 @@ class Boucles{
     constructor(){
         if(!instance){
             console.log("new object Boucles");
-            instance = this;                          
+            instance = this;
             this.definitionsRaw = require(path+'boucles-dist.json');
-            this.definitions = this.compil(this.definitionsRaw);            
+            this.definitions = this.compil(this.definitionsRaw);
         }
-        
+
         console.log("return instance");
         return instance;
     }
@@ -20,19 +20,19 @@ class Boucles{
     compil(definitions){
         console.log("compil----------");
 
-        for(let boucle in definitions){            
+        for(let boucle in definitions){
             //console.log(this.definitions[boucle].jointures);
             if(definitions[boucle].jointures){
 
                 let id_boucle =  definitions[boucle].id;
                 for(let join in definitions[boucle].jointures){
                     //this.definitions[boucle]
-                    let boucle_join = definitions[boucle].jointures[join];                    
+                    let boucle_join = definitions[boucle].jointures[join];
                     //console.log("join:"+join);
                     if(!definitions[boucle_join]['jointuresInverses']) definitions[boucle_join]['jointuresInverses'] = {};
                     definitions[boucle_join].jointuresInverses[id_boucle] = boucle;
                 }
-                
+
             }
         }
 
@@ -42,7 +42,7 @@ class Boucles{
 
     }
 
-    add(newBoucles){        
+    add(newBoucles){
         for (let prop in newBoucles) {
             this.definitionsRaw[prop] = newBoucles[prop];
         }
@@ -63,4 +63,3 @@ class Boucles{
 
 const boucles = new Boucles();
 module.exports = boucles;
-

@@ -94,6 +94,7 @@ module.exports = class SpipServer{
 
 
 }
+
 function throwIfMissing() {
     throw new Error('Missing parameter');
 }

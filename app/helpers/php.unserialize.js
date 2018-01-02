@@ -27,9 +27,9 @@ module.exports = function unserialize (data) {
     //   returns 2: {firstName: 'Kevin', midName: 'van'}
     //   example 3: unserialize('a:3:{s:2:"ü";s:2:"ü";s:3:"四";s:3:"四";s:4:"𠜎";s:4:"𠜎";}')
     //   returns 3: {'ü': 'ü', '四': '四', '𠜎': '𠜎'}
-  
+
     var $global = (typeof window !== 'undefined' ? window : global)
-  
+
     var utf8Overhead = function (str) {
       var s = str.length
       for (var i = str.length - 1; i >= 0; i--) {
@@ -54,7 +54,7 @@ module.exports = function unserialize (data) {
       var i = 2
       var buf = []
       var chr = data.slice(offset, offset + 1)
-  
+
       while (chr !== stopchr) {
         if ((i + offset) > data.length) {
           error('Error', 'Invalid')
@@ -67,7 +67,7 @@ module.exports = function unserialize (data) {
     }
     var readChrs = function (data, offset, length) {
       var i, chr, buf
-  
+
       buf = []
       for (i = 0; i < length; i++) {
         chr = data.slice(offset + (i - 1), offset + i)
@@ -99,14 +99,14 @@ module.exports = function unserialize (data) {
       var typeconvert = function (x) {
         return x
       }
-  
+
       if (!offset) {
         offset = 0
       }
       dtype = (data.slice(offset, offset + 1)).toLowerCase()
-  
+
       dataoffset = offset + 2
-  
+
       switch (dtype) {
         case 'i':
           typeconvert = function (x) {
@@ -143,7 +143,7 @@ module.exports = function unserialize (data) {
           chrs = ccount[0]
           stringlength = ccount[1]
           dataoffset += chrs + 2
-  
+
           readData = readChrs(data, dataoffset + 1, parseInt(stringlength, 10))
           chrs = readData[0]
           readdata = readData[1]
@@ -154,33 +154,33 @@ module.exports = function unserialize (data) {
           break
         case 'a':
           readdata = {}
-  
+
           keyandchrs = readUntil(data, dataoffset, ':')
           chrs = keyandchrs[0]
           keys = keyandchrs[1]
           dataoffset += chrs + 2
-  
+
           length = parseInt(keys, 10)
           contig = true
-  
+
           for (i = 0; i < length; i++) {
             kprops = _unserialize(data, dataoffset)
             kchrs = kprops[1]
             key = kprops[2]
             dataoffset += kchrs
-  
+
             vprops = _unserialize(data, dataoffset)
             vchrs = vprops[1]
             value = vprops[2]
             dataoffset += vchrs
-  
+
             if (key !== i) {
               contig = false
             }
-  
+
             readdata[key] = value
           }
-  
+
           if (contig) {
             array = new Array(length)
             for (i = 0; i < length; i++) {
@@ -188,7 +188,7 @@ module.exports = function unserialize (data) {
             }
             readdata = array
           }
-  
+
           dataoffset += 1
           break
         default:
@@ -197,7 +197,6 @@ module.exports = function unserialize (data) {
       }
       return [dtype, dataoffset - offset, typeconvert(readdata)]
     }
-  
+
     return _unserialize((data + ''), 0)[2]
   }
-  

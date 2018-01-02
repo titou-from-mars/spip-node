@@ -9,7 +9,7 @@ class MysqlClient{
      * Effectue la requête SQL.
      * @param {string} sql - Une requête sql
      * @param {string} connection_name - L'identifiant de la connection dans l'array de connection de Database.js
-     * 
+     *
      * @return {object} - le résultat de la requête sql
      */
     query (sql,connection_name){
@@ -29,11 +29,10 @@ class MysqlClient{
                 console.log(err.message);
                 return Promise.reject(err);
             });
-           
-        
+
+
     }
 
-}    
-
+}
 
 module.exports = MysqlClient;

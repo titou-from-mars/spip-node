@@ -1,4 +1,4 @@
-const express = require('express'), 
+const express = require('express'),
 roles = require('../models/spip/roles'),
 autorise = require('../auth/autorise.js');
 rise = require('../auth/rise.js'),
@@ -33,7 +33,7 @@ router.patch('/eval/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.ADMI
     statut(req,res,req.params.boucle,req.params.id,'prop');
 });
 
-function statut(req,res,boucle,id,statut){    
+function statut(req,res,boucle,id,statut){
     req.requete['criteres']={};
     req.requete['set'] = {statut:statut};
     let id_name = definitions.getId(req.params.boucle);
@@ -56,10 +56,5 @@ function statut(req,res,boucle,id,statut){
     });
 
 }
-
-
-
-
-
 
 module.exports = router;

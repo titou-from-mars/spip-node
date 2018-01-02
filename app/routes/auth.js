@@ -1,6 +1,6 @@
-const express = require('express'), 
-      jwt = require('jsonwebtoken'), 
-      router = express.Router();      
+const express = require('express'),
+      jwt = require('jsonwebtoken'),
+      router = express.Router();
 
 router.post('/login',function(req,res){
     console.log("login, connectionID",req.requete.connection);

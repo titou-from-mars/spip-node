@@ -1,12 +1,12 @@
 var mysql = require("mysql2/promise");
 
 class Database{
-    
+
     constructor(configs){
         this.activeConnection = null;
         this.connectionList = [];
         this.pool = [];
-        for(let i = 0, l = configs.length ; i < l ; i++) 
+        for(let i = 0, l = configs.length ; i < l ; i++)
             this.addConnection(configs[i]);
     }
 
@@ -15,7 +15,7 @@ class Database{
         database=throwIfMissing(),
         connectionLimit=10,
         debug=false,
-        host='localhost',        
+        host='localhost',
         user='root',
         password=''
     }){
@@ -35,10 +35,10 @@ class Database{
 
     }
 
-    getConnection(connectionName=throwIfMissing()){        
-        return this.pool[connectionName].getConnection();    
+    getConnection(connectionName=throwIfMissing()){
+        return this.pool[connectionName].getConnection();
     }
-    
+
 }
 
 function throwIfMissing() {
