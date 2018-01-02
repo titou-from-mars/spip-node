@@ -24,7 +24,7 @@ class Meta {
     return this.mysqlClient.query("SELECT `nom`,`valeur` FROM `spip_meta` WHERE 1",connectionID)
       .then((meta) => {
         this.metaCache[connectionID] = {};
-        // https://stackoverflow.com/questions/4748795/how-to-find-out-if-a-string-is-a-serialized-object-array-or-just-a-string            
+        // https://stackoverflow.com/questions/4748795/how-to-find-out-if-a-string-is-a-serialized-object-array-or-just-a-string
         for (let i = 0, len = meta.length; i < len; i++) {
           this.metaCache[connectionID][meta[i].nom] = this.decodeMeta(meta[i].valeur);
         }
@@ -37,7 +37,7 @@ class Meta {
 
   /**
    * Test si la meta transmise est serializée. Si oui, la décode et la renvoi, sinon, la renvoi telle quelle
-   * 
+   *
    * @param {string} meta - la valeur de la meta
    * @memberof Meta
    */
@@ -58,15 +58,34 @@ class Meta {
   }
 
   get(meta,connectionID) {
-    if (this.metaCache[connectionID] && this.metaCache[connectionID][meta]) {
-      console.log("get meta from",connectionID,"cache");
-      return Promise.resolve(this.metaCache[connectionID][meta]);
-    } else {
-      console.log("get meta from sql");
-      let sql = mysql.format("SELECT * FROM `spip_meta` WHERE `nom` = ? ", [meta]);
-      return this.mysqlClient.query(sql,connectionID).then((retour) => {        
-        return this.cacheMeta(meta, this.decodeMeta(retour[0].valeur) ,connectionID);
+    console.log('meta', meta);
+    if(meta.indexOf(',') > -1){
+      console.log('on a trouvé une virgule');
+      meta = JSON.parse(meta);
+      let sql = "SELECT * FROM `spip_meta` WHERE `nom` IN(";
+      let first = true;
+      for(let i = 0, len = meta.length; i < len; i++){
+        (!first)? sql += ',' : first = false;
+        sql += `'${meta[i]}'`;
+      }
+      sql += ')';
+      return this.mysqlClient.query(sql,connectionID).then(retour => {
+        return retour;
       });
+
+    }else{
+      console.log('pas de virgule');
+      if (this.metaCache[connectionID] && this.metaCache[connectionID][meta]) {
+        console.log("get meta from",connectionID,"cache");
+        return Promise.resolve(this.metaCache[connectionID][meta]);
+      } else {
+        console.log("get meta from sql");
+        let sql = mysql.format("SELECT * FROM `spip_meta` WHERE `nom` = ? ", [meta]);
+        return this.mysqlClient.query(sql,connectionID).then((retour) => {
+          return this.cacheMeta(meta, this.decodeMeta(retour[0].valeur) ,connectionID);
+        });
+      }
+
     }
 
   }

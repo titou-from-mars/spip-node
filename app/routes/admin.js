@@ -15,7 +15,7 @@ router.get('/recalcul', autorise(roles.ADMIN_RESTREINT),function (req, res){
             )
 
         }
-        
+
     })
     .catch((e)=>{
         es.status(500).json(
@@ -38,7 +38,7 @@ router.get('/meta/recalcul',autorise(roles.ADMIN_RESTREINT), function(req,res){
             )
 
         }
-        
+
     })
     .catch((e)=>{
         es.status(500).json(
@@ -48,6 +48,25 @@ router.get('/meta/recalcul',autorise(roles.ADMIN_RESTREINT), function(req,res){
             });
     });
 });
+
+router.get('/meta/tout',autorise(roles.ADMIN_RESTREINT),function(req,res){
+    req.spip.meta.getAll(req.requete.connection)
+    .then(retour=>{
+        res.json(
+            {
+                "status":"success",
+                "data":retour
+            }
+        )
+    })
+    .catch((e)=>res.status(500).json(
+        {
+            "status":"error",
+            "message":e.message
+        }
+    ));
+});
+
 router.get('/meta/:meta',autorise(roles.ADMIN_RESTREINT),function(req,res){
     req.spip.meta.get(req.params.meta,req.requete.connection)
     .then((retour)=>{
