@@ -61,7 +61,7 @@ class Meta {
     console.log('meta', meta);
     if(meta.indexOf(',') > -1){
       console.log('on a trouvé une virgule');
-      meta = JSON.parse(meta);
+      meta = meta.split(',');
       let sql = "SELECT * FROM `spip_meta` WHERE `nom` IN(";
       let first = true;
       for(let i = 0, len = meta.length; i < len; i++){
@@ -70,7 +70,11 @@ class Meta {
       }
       sql += ')';
       return this.mysqlClient.query(sql,connectionID).then(retour => {
-        return retour;
+        let metas = {};
+        for(let i = 0, len = retour.length; i < len; i++){
+          metas[retour[i].nom] = this.decodeMeta(retour[i].valeur);
+        }
+        return metas;
       });
 
     }else{
@@ -82,7 +86,7 @@ class Meta {
         console.log("get meta from sql");
         let sql = mysql.format("SELECT * FROM `spip_meta` WHERE `nom` = ? ", [meta]);
         return this.mysqlClient.query(sql,connectionID).then((retour) => {
-          return this.cacheMeta(meta, this.decodeMeta(retour[0].valeur) ,connectionID);
+           return this.cacheMeta(meta, this.decodeMeta(retour[0].valeur) ,connectionID);
         });
       }
 
