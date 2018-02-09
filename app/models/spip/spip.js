@@ -103,7 +103,7 @@ Spip.prototype.login = function(login,pwd,connection){
             }
 
             if(logged){
-                 console.log("on retourne le user");
+                console.log("on retourne le user");
                 resolve( {logged:logged,user:user});
             }else{
                 console.log("on retourne un user vide");
