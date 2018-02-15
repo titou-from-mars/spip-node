@@ -54,7 +54,7 @@ Spip.prototype.auth = function(id_auteur,connection){
             else{
                 switch(user.statut){
                     case "0minirezo": user.role = roles.ADMIN; break;
-                    case "redacteur": user.role = roles.REDACTEUR; break;
+                    case "1comite": user.role = roles.REDACTEUR; break;
                     case "6forum"   : user.role = roles.VISITEUR; break;
                     default: user.role = roles.PUBLIC;
                 }
