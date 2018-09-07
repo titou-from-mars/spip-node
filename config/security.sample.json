@@ -1,4 +1,6 @@
 {
     "secretOrKey":"une_clef_pour_verifier_la_signature_du_token",
-    "roleMinimum":1
+    "roleMinimum":1,
+    "authorizeIp":["::ffff:127.0.0.1"],
+    "favouredIp":null
 }

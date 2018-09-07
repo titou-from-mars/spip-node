@@ -1,6 +1,6 @@
 module.exports = function(requiredRole) {
     return function (req, res, next) {
-        console.log("Role nécessaire :",requiredRole,", user role:",req.user.role,", role mini:",req.roleMinimum);
+        console.log("from ",req.get('origin'),"Role nécessaire :",requiredRole,", user role:",req.user.role,", role mini:",req.roleMinimum);
         if(req.user.role+req.user.bonus >= requiredRole && req.user.role+req.user.bonus >= req.roleMinimum) next();
         else res.status(403).json({
             status:"fail",
