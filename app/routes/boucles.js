@@ -18,7 +18,7 @@ const express = require('express'),
  *      plugrand:{date:"2016"}, //les élements dont la date est postérieures à 2016
  *      pluspetit:{date:"2017",id_article:256}, //les élements dont la date est antérieure à 2017  et l'id_article plus petit que 256
  *   },
- *   balises:["id_article","titre","texte"] //renvoi l'id_article, le titre et le texte des articles correspondants aux critères de sélection
+ *   balises:["id_article","titre","texte","urls"] //renvoi l'id_article, le titre, le texte et LES urls des articles correspondants aux critères de sélection. ATTENTION, urls renvoi un tableau, vu que plusieurs urls peuvent être associée à un objet spip
  *   order:{date:"DESC"} //Ordonne les articles du plus récent au plus ancien
  * }
  * @param {string} boucle - Le nom d'une boucle au pluriel
