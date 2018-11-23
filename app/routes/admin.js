@@ -67,6 +67,14 @@ router.get('/meta/tout',autorise(roles.ADMIN_RESTREINT),function(req,res){
     ));
 });
 
+/**
+ * /:connection/admin/meta/:meta
+ * @param meta  le nom de pla propriété meta dont on veut récupérer la valeur
+ * @example : /cv/admin/meta/adresse_suivi
+ * renverra l'adresse configurée pour recevoir les messages de suivi de l'activité éditoriale
+ * (configuré dans Interactivité/Notifications/Envoi de mails automatique)
+ * du site correspondant à la connection cv
+ */
 router.get('/meta/:meta',autorise(roles.ADMIN_RESTREINT),function(req,res){
     req.spip.meta.get(req.params.meta,req.requete.connection)
     .then((retour)=>{
