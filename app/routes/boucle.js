@@ -2,7 +2,8 @@ const express = require('express'),
     router = express.Router(),
     validRoutes = require('./validate/valid-routes.js'),
     validParams = require('./validate/valid-parameters.js'),
-    definitions = require('../models/spip/boucles.js').definitions
+    definitions = require('../models/spip/boucles.js').definitions,
+    rise = require('../auth/rise.js'),
     roles = require('../models/spip/roles');
 
 
@@ -161,7 +162,7 @@ router.delete('/:boucle'+validRoutes.route+'/:id(\\d+)/',autorise(roles.WEBMESTR
  * @param {int} id - L'id correspondant à l'élement ciblé
  * @param {json} ids - Le ou les id des éléments à ajouter à l'élement cible
  */
-router.patch('/:boucle/:id(\\d+)/ajouter/:ids',autorise(roles.ADMIN),function(req,res){
+router.patch('/:boucle/:id(\\d+)/ajouter/:ids', rise, autorise(roles.ADMIN), function(req,res){
 
     req.requete['liens'] = validParams.mustBeJSON(req.params.ids,res);
     req.requete["id"] = req.params.id;
@@ -195,7 +196,7 @@ router.patch('/:boucle/:id(\\d+)/ajouter/:ids',autorise(roles.ADMIN),function(re
  * @param {int} id - L'id correspondant à l'élement ciblé
  * @param {json} ids - Le ou les id des éléments à associer à l'élement cible : {"id_mot":[2,5],"id_auteur":4}
  */
-router.patch('/:boucle/:id(\\d+)/retirer/:ids',autorise(roles.ADMIN),function(req,res){
+router.patch('/:boucle/:id(\\d+)/retirer/:ids', rise, autorise(roles.ADMIN),function(req,res){
 
     req.requete['liens'] = validParams.mustBeJSON(req.params.ids,res);
     req.requete["id"] = req.params.id;
